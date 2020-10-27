@@ -1,0 +1,3 @@
+[submodule "hello"]
+	path = hello
+	url = https://github.com/bpy28/hello.git
