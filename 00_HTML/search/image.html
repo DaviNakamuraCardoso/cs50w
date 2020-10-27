@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Search</title>
+        <meta charset="utf-8">
+        <title>Image Search</title>
         <link rel="stylesheet" href="stylesheet.css">
         <link rel="apple-touch-icon" sizes="57x57" href="icon/apple-icon-57x57.png">
         <link rel="apple-touch-icon" sizes="60x60" href="icon/apple-icon-60x60.png">
@@ -20,26 +21,26 @@
         <meta name="msapplication-TileColor" content="#ffffff">
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
         <meta name="theme-color" content="#ffffff">
-
     </head>
     <body>
 
         <div class="right">
             <ul>
-                <a class="menu_li" href="advanced.html"><li>Advanced</li></a>
-                <a class="menu_li" href="image.html"><li>Image</li></a>
+                <a class="menu_li" href="index.html"><li>Search</li></a>
+                <a class="menu_li" href="advanced.html"><li>Advanced Search</li></a>
             </ul>
         </div>
-        <div class="center">
+        <figure class="center" id="logo">
             <a href="index.html">
-                <span title="CS50 Web Project 0 by Davi Nakamura"><img src="logo.png" alt="Logo" id="logo"></span>
+                <img src="logo.png" alt="Logo">
+                <figcaption>images</figcaption>
             </a>
-        </div>
+        </figure>
+
         <div id="search_box" class="center">
-            <form method="get" action="https://google.com/search">
+            <form method="get" action="https://google.com/images">
                 <input type="text" name="q" id="text_box"><br>
-                <input type="submit" name="btnK" value="Google Search">
-                <input type="submit" name="btnI" value="I'm Feeling Lucky">
+                <input type="submit" value="Search Image">
             </form>
         </div>
 
