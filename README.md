@@ -27,3 +27,11 @@
 - Branching with *git branch*, *git checkout -b*, *git merge*
 - GitHub features: Forking and Github Pages
 
+### Lecture 2: Python 
+
+- Types of variables
+- Data structures: lists, dicts, sets and tuples 
+- Loops, functions and modules
+- Decorators and lambda
+- Exceptions 
+
