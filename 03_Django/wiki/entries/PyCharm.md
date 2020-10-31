@@ -1,2 +1,10 @@
 # PyCharm
- A IDE for writing programms in [Python](/wiki/Python).
+
+ A IDE for writting programms in [Python](/wiki/Python).
+
+        
+    
+        
+    
+    
+    
