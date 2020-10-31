@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django import template
 from django import forms
 from django.urls import reverse
+from django.contrib import messages
 from . import util
 import markdown2
 import re
@@ -56,8 +57,16 @@ def new(request):
         if form.is_valid():
             title = form.cleaned_data["title"]
             article = f'# {title}\n {form.cleaned_data["article"]}'
-            util.save_entry(form.cleaned_data["title"], article)
-            return HttpResponseRedirect(reverse("index"))
+            if str(title) in util.list_entries():
+                messages.warning(request, f'File {title} already exists.')
+                return render(request, "encyclopedia/new.html", {
+                "form": form,
+                "file": title
+                })
+            else:
+
+                util.save_entry(form.cleaned_data["title"], article)
+                return HttpResponseRedirect(reverse("index"))
         else:
             return render(request, "encyclopedia/new.html", {
                 "form": form
@@ -66,6 +75,17 @@ def new(request):
 
     return render(request, "encyclopedia/new.html", {
         "form": NewArticle()
+    })
+
+
+def edit(request, article):
+    if request.method == 'POST':
+        new_article = request.POST.get('new_article')
+        util.save_entry(article, new_article)
+        return HttpResponseRedirect(reverse('definitions', args=(article, )))
+    return render(request, "encyclopedia/edit.html", {
+        "title": article,
+        "body": util.get_entry(article)
     })
 
 
