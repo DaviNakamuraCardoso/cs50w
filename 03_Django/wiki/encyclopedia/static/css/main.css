@@ -1,43 +1,115 @@
-/*
-Error: Invalid CSS after "$red_complementary": expected selector or at-rule, was ": #57363B;"
-        on line 8 of main.scss
+@import url("https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap");
+/* Colors */
+/* Fonts */
+/* Position */
+/* HTML tags */
+a {
+  text-decoration: none;
+  color: inherit;
+  font-family: inherit; }
 
-3: @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap');
-4: 
-5: /* Colors *\/
-6: $theme_color: #898DDD;
-7: $theme_complementary: 
-8: $red_complementary: #57363B;
-9: $red_lighter: #D6455A;
-10: 
-11: /* Fonts *\/
-12: $display_font: 'Bebas Neue', serif;
-13: $main_font: 'Merriweather', serif;
+li {
+  margin-bottom: 5px; }
 
-Backtrace:
-main.scss:8
-/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/scss/parser.rb:1308:in `expected'
-/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/scss/parser.rb:1238:in `expected'
-/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/scss/parser.rb:42:in `parse'
-/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/engine.rb:414:in `_to_tree'
-/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/engine.rb:389:in `_render_with_sourcemap'
-/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/engine.rb:307:in `render_with_sourcemap'
-/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:462:in `update_stylesheet'
-/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
-/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:209:in `each'
-/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
-/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:443:in `on_file_changed'
-/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:320:in `block in watch'
-/var/lib/gems/2.7.0/gems/sass-listen-4.0.0/lib/sass-listen/event/config.rb:23:in `call'
-/var/lib/gems/2.7.0/gems/sass-listen-4.0.0/lib/sass-listen/event/processor.rb:115:in `_process_changes'
-/var/lib/gems/2.7.0/gems/sass-listen-4.0.0/lib/sass-listen/event/processor.rb:19:in `block in loop_for'
-/var/lib/gems/2.7.0/gems/sass-listen-4.0.0/lib/sass-listen/event/processor.rb:15:in `loop'
-/var/lib/gems/2.7.0/gems/sass-listen-4.0.0/lib/sass-listen/event/processor.rb:15:in `loop_for'
-/var/lib/gems/2.7.0/gems/sass-listen-4.0.0/lib/sass-listen/event/loop.rb:84:in `_wait_for_changes'
-/var/lib/gems/2.7.0/gems/sass-listen-4.0.0/lib/sass-listen/event/loop.rb:42:in `block in setup'
-/var/lib/gems/2.7.0/gems/sass-listen-4.0.0/lib/sass-listen/internals/thread_pool.rb:6:in `block in add'
-*/
-body:before {
-  white-space: pre;
-  font-family: monospace;
-  content: "Error: Invalid CSS after \"$red_complementary\": expected selector or at-rule, was \": #57363B;\"\A         on line 8 of main.scss\A \A 3: @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap');\A 4: \A 5: /* Colors */\A 6: $theme_color: #898DDD;\A 7: $theme_complementary: \A 8: $red_complementary: #57363B;\A 9: $red_lighter: #D6455A;\A 10: \A 11: /* Fonts */\A 12: $display_font: 'Bebas Neue', serif;\A 13: $main_font: 'Merriweather', serif;"; }
+textarea {
+  line-height: 20px;
+  width: 600px;
+  height: 600px;
+  border: 3px solid gray; }
+
+textarea:focus {
+  border: 3px solid #898DDD;
+  outline: none; }
+
+body {
+  padding: 0px; }
+
+/* Classes */
+.main {
+  position: absolute;
+  float: left;
+  margin-left: 24%; }
+  .main h1 {
+    font-family: "Merriweather", serif; }
+  .main p {
+    font-family: serif; }
+  .main a {
+    color: blue; }
+    .main a li {
+      color: white;
+      font-size: 18px;
+      background-color: #D6455A;
+      padding: 10px 300px 10px 10px;
+      transition: 1s;
+      transform-origin: bottom;
+      transform-style: preserve-3d; }
+    .main a li:hover {
+      padding: 10px 280px 10px 30px;
+      transition: 1s;
+      transition-delay: 0.25s;
+      transform-origin: bottom;
+      transform-style: preserve-3d; }
+  .main ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px; }
+
+.sidebar_element {
+  padding: 10px 0px 10px 15px;
+  font-size: 30px;
+  transition: 1s;
+  transform-style: preserve-3d; }
+
+.sidebar_element:hover {
+  transition: 1s;
+  padding-left: 40px; }
+
+.sidebar {
+  background-color: #898DDD;
+  padding: 10px  0px 10px 0px;
+  margin-left: -10px;
+  margin-top: -10px;
+  float: left;
+  width: 22%;
+  position: absolute;
+  height: 100%;
+  color: white;
+  font-family: "Bebas Neue", serif; }
+
+.submit_button {
+  position: absolute;
+  padding: 10px;
+  background-color: #898DDD;
+  color: white;
+  transition: 1s;
+  transform-style: preserve-3d;
+  float: left;
+  border: none; }
+
+.submit_button:hover {
+  background-color: #93D9DD; }
+
+/* IDS */
+#sidebar_title {
+  padding: 0px 0px 0px 15px;
+  font-family: "Merriweather", serif;
+  font-size: 28px; }
+
+#search {
+  margin-left: 15px;
+  margin-bottom: 10px;
+  height: 25px;
+  width: 160px;
+  border-radius: 20px;
+  border: 4px solid #898DDD;
+  padding: 5px; }
+
+#search:focus {
+  outline: none;
+  border: 4px solid #D6455A; }
+
+/* EOF */
+
+/*# sourceMappingURL=main.css.map */
