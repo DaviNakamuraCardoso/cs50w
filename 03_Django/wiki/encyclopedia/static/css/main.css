@@ -1,0 +1,43 @@
+/*
+Error: Invalid CSS after "$red_complementary": expected selector or at-rule, was ": #57363B;"
+        on line 8 of main.scss
+
+3: @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap');
+4: 
+5: /* Colors *\/
+6: $theme_color: #898DDD;
+7: $theme_complementary: 
+8: $red_complementary: #57363B;
+9: $red_lighter: #D6455A;
+10: 
+11: /* Fonts *\/
+12: $display_font: 'Bebas Neue', serif;
+13: $main_font: 'Merriweather', serif;
+
+Backtrace:
+main.scss:8
+/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/scss/parser.rb:1308:in `expected'
+/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/scss/parser.rb:1238:in `expected'
+/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/scss/parser.rb:42:in `parse'
+/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/engine.rb:414:in `_to_tree'
+/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/engine.rb:389:in `_render_with_sourcemap'
+/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/engine.rb:307:in `render_with_sourcemap'
+/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:462:in `update_stylesheet'
+/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
+/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:209:in `each'
+/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
+/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:443:in `on_file_changed'
+/var/lib/gems/2.7.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:320:in `block in watch'
+/var/lib/gems/2.7.0/gems/sass-listen-4.0.0/lib/sass-listen/event/config.rb:23:in `call'
+/var/lib/gems/2.7.0/gems/sass-listen-4.0.0/lib/sass-listen/event/processor.rb:115:in `_process_changes'
+/var/lib/gems/2.7.0/gems/sass-listen-4.0.0/lib/sass-listen/event/processor.rb:19:in `block in loop_for'
+/var/lib/gems/2.7.0/gems/sass-listen-4.0.0/lib/sass-listen/event/processor.rb:15:in `loop'
+/var/lib/gems/2.7.0/gems/sass-listen-4.0.0/lib/sass-listen/event/processor.rb:15:in `loop_for'
+/var/lib/gems/2.7.0/gems/sass-listen-4.0.0/lib/sass-listen/event/loop.rb:84:in `_wait_for_changes'
+/var/lib/gems/2.7.0/gems/sass-listen-4.0.0/lib/sass-listen/event/loop.rb:42:in `block in setup'
+/var/lib/gems/2.7.0/gems/sass-listen-4.0.0/lib/sass-listen/internals/thread_pool.rb:6:in `block in add'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Error: Invalid CSS after \"$red_complementary\": expected selector or at-rule, was \": #57363B;\"\A         on line 8 of main.scss\A \A 3: @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap');\A 4: \A 5: /* Colors */\A 6: $theme_color: #898DDD;\A 7: $theme_complementary: \A 8: $red_complementary: #57363B;\A 9: $red_lighter: #D6455A;\A 10: \A 11: /* Fonts */\A 12: $display_font: 'Bebas Neue', serif;\A 13: $main_font: 'Merriweather', serif;"; }
