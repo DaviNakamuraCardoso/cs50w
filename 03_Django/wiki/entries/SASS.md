@@ -1,2 +1,2 @@
 # SASS
- Syntatically Awesome Style Sheets.
+ Syntactically Awesome Style Sheets.

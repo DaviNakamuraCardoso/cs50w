@@ -1,13 +1,11 @@
 {% load static %}
-{% load encyclopedia_extras %}
 
 <!DOCTYPE html>
 
 <html lang="en">
     <head>
         <title>{% block title %}{% endblock %}</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link href="{% static 'encyclopedia/styles.css' %}" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
         <link rel="apple-touch-icon" sizes="57x57" href="{% static 'encyclopedia/icons/apple-icon-57x57.png'%}">
         <link rel="apple-touch-icon" sizes="60x60" href="{% static 'encyclopedia/icons/apple-icon-60x60.png'%}">
         <link rel="apple-touch-icon" sizes="72x72" href="{% static 'encyclopedia/icons/apple-icon-72x72.png'%}">
@@ -21,37 +19,38 @@
         <link rel="icon" type="image/png" sizes="32x32" href="{% static 'encyclopedia/icons/favicon-32x32.png' %}">
         <link rel="icon" type="image/png" sizes="96x96" href="{% static 'encyclopedia/icons/favicon-96x96.png' %}">
         <link rel="icon" type="image/png" sizes="16x16" href="{% static 'encyclopedia/icons/favicon-16x16.png' %}">
-        <link rel="manifest" href="{% static 'encyclopedia/icons/manifest.json' %}">
-        <meta name="msapplication-TileColor" content="#ffffff">
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
-        <meta name="theme-color" content="#ffffff">
     </head>
     <body>
-        <div class="row">
-            <div class="sidebar col-lg-2 col-md-3">
-                <h2>Wiki</h2>
-                <form action="{% url 'search' %}">
-                    {% csrf_token %}
-                    <input class="search" type="text" name="q" placeholder="Search Encyclopedia">
-                </form>
-                <div>
-                    <a href="{% url 'index' %}">Home</a>
-                </div>
-                <div>
-                    <a href="{% url 'new' %}">Create New Page</a>
-                </div>
-                <div>
-                    <a href="{% url 'random' %}">Random Page</a>
-
-
-                </div>
-                {% block nav %}
-                {% endblock %}
+        <div class="sidebar">
+            <div id="sidebar_title">
+                <h1>Wiki</h1>
             </div>
-            <div class="main col-lg-10 col-md-9">
-                {% block body %}
-                {% endblock %}
-            </div>
+            <form action="{% url 'search' %}">
+                {% csrf_token %}
+                <input id="search" type="text" name="q" placeholder="Search Encyclopedia">
+            </form>
+            <a href="{% url 'index' %}">
+                <div class="sidebar_element">
+                    Home
+                </div>
+            </a>
+            <a href="{% url 'new' %}">
+                <div class="sidebar_element">
+                    Create New Page
+                </div>
+            </a>
+            <a href="{% url 'random' %}">
+                <div class="sidebar_element">
+                    Random Page
+                </div>
+            </a>
+            {% block nav %}
+            {% endblock %}
+        </div>
+        <div class="main">
+            {% block body %}
+            {% endblock %}
         </div>
 
     </body>
