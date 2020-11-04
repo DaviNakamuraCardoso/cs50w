@@ -109,13 +109,15 @@ def new_listing(request):
 
 def listing_view(request, id):
     listing = Listing.objects.get(id=id)
+    user_bid = request.user.user_bids.filter(listing=listing)
+    if len(user_bid) < 1:
+        user_bid = None
     if request.method == 'POST':
         return HttpResponseRedirect(reverse('add_bid', args=(id, )))
     return render(request, "auctions/listing.html", {
         "listing":listing,
         "listing_bids":listing.listing_bids.all().order_by('-bid'),
-        "user_bid": request.user.user_bids.get(listing=listing)
-
+        "user_bid": user_bid
     })
 
 

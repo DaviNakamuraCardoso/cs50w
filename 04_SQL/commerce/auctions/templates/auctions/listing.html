@@ -51,13 +51,7 @@
             </a>
             offered $
             {% if bid.user.username == request.user.username %}
-                <form action="{% url 'update_bid' listing.id %}" method="post">
-
-                    <textarea>{{ bid.bid }}</textarea>
-                    <input type="submit" name="new_bid">
-
-                </form>
-
+            
             {% else %}
                 {{ bid.bid }}
 
