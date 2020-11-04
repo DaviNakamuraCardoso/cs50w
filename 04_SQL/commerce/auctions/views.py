@@ -117,7 +117,8 @@ def listing_view(request, id):
     return render(request, "auctions/listing.html", {
         "listing":listing,
         "listing_bids":listing.listing_bids.all().order_by('-bid'),
-        "user_bid": user_bid
+        "user_bid": user_bid,
+        "non_watchers": User.objects.exclude(watchlist=listing).all()
     })
 
 
@@ -134,3 +135,119 @@ def add_bid(request, id):
         bid = Bid(user=request.user, bid=new_bid, listing=listing)
         bid.save()
         return HttpResponseRedirect(reverse("listing", args=(id, )))
+
+
+
+@login_required
+def update_bid(request, id):
+    listing = Listing.objects.get(id=id)
+    new_bid = int(request.POST['updated_bid'])
+    if new_bid >= listing.current_bid and new_bid > listing.starting_bid:
+        listing.winner = request.user.username
+        listing.current_bid = new_bid
+        listing.save()
+        user_bid = request.user.user_bids.filter(listing=listing)[0]
+        user_bid.bid = new_bid
+        user_bid.save()
+
+    return HttpResponseRedirect(reverse("listing", args=(id, )))
+
+
+
+@login_required
+def update_watchlist(request, id):
+    listing = Listing.objects.get(id=id)
+    if request.method == "POST":
+        if 'add_watchlist' in request.POST:
+            listing.watchers.add(request.user)
+        elif 'remove_watchlist' in request.POST:
+            listing.watchers.remove(request.user)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#

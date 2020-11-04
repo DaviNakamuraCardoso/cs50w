@@ -31,7 +31,7 @@ class Listing(models.Model):
 
     current_bid = models.IntegerField(default=0)
     winner = models.CharField(max_length=64, default="No winners yet.")
-    watchers = models.ManyToManyField(User, blank=True, null=True, related_name="watchlist")
+    watchers = models.ManyToManyField(User, blank=True, related_name="watchlist")
 
 
     def __str__(self):
