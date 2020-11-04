@@ -1,0 +1,20 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <form action="{% url 'new' %}" method="post">
+        {% csrf_token %}
+        <li>Title<input type="text" name="title"></li>
+        <li>Description<input type="text" name="description" ></li>
+        <li>Start Bid<input type="number" name="start_bid"></li>
+        <options>
+            <li>Category<input type="text" name="category" ></li>
+        </options>
+        <li>Image url (optional): <input type="text" name="image_url"></li>
+        <li><input type="submit"></li>
+
+
+    </form>
+
+
+{% endblock %}
