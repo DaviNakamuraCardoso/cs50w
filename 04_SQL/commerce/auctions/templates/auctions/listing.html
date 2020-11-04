@@ -1,0 +1,77 @@
+{% extends "auctions/layout.html" %}
+{% block body %}
+<h1>{{ listing.title }}</h1>
+
+<h2>Auction by {{ listing.user.username}}</h2>
+
+<h3>Start bid: {{ listing.starting_bid}}</h3>
+
+<h3>Description:</h3>
+
+<p>{{ listing.description }}</p>
+
+
+
+{% if listing.category %}
+    <h3>Category: {{listing.category}}</h3>
+{% endif %}
+
+{% if listing.image_url %}
+    <h3>Image:</h3>
+    <img src="{{listing.image_url}}" width=200px height=auto>
+{% endif %}
+
+<ul>
+    <li>Current Bid: ${{listing.current_bid}}</li>
+    <li>Current Winner: {{listing.winner}}</li>
+
+
+</ul>
+
+
+{% if request.user.username == listing.user.username %}
+
+{% elif user_bid is None %}
+    <form action="{% url 'add_bid' listing.id %}" method="post">
+        {% csrf_token %}
+        <input type="number" name="bid">
+        <input type="submit" value="Make Bid">
+
+    </form>
+
+{% endif %}
+
+<h2>Bids:</h2>
+<ul>
+    {% for bid in listing_bids %}
+        <li>
+
+            <a href="{% url 'user_page' bid.user.username %}">
+                {{ bid.user.username }}
+            </a>
+            offered $
+            {% if bid.user.username == request.user.username %}
+                <form action="{% url 'update_bid' listing.id %}" method="post">
+
+                    <textarea>{{ bid.bid }}</textarea>
+                    <input type="submit" name="new_bid">
+
+                </form>
+
+            {% else %}
+                {{ bid.bid }}
+
+
+
+            {% endif %}
+        </li>
+
+    {% empty %}
+        <li>No bids yet.</li>
+    {% endfor %}
+</ul>
+
+{% if message %}
+<h2>{{ message }}</h2>
+{% endif %}
+{% endblock %}
