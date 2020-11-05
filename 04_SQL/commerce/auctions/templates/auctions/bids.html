@@ -1,0 +1,34 @@
+{% extends "auctions/layout.html" %}
+
+
+{% block body %}
+
+<h2>My bids</h2>
+    <ul>
+    {% for bid in bids %}
+        {% if not bid.listing.is_closed %}
+            <li>
+                <ul>
+                    <li>
+                        <a href="{% url 'listing' bid.listing.id %}">{{ bid.listing.title }}</a>
+                    </li>
+                    <li>
+                        Current listing bid: {{ bid.listing.current_bid }}
+                    </li>
+
+                    {% if bid.listing.winner == request.user.username %}
+                        <li>Winning</li>
+                    {% else %}
+                        <li>Loosing</li>
+                    {% endif %}
+
+                </ul>
+
+            </li>
+        {% endif %}
+        {% empty %}
+        <li>No active bids.</li>
+    {% endfor %}
+
+    </ul>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+{% if user.id == request.user.id %}
+<h1>My Watchlist</h1>
+{% else %}
+<h1>{{ user.first_name }}'s watchlist</h1>
+{% endif %}
+        <ul>
+
+            {% for listing in watchlist %}
+            <li>
+                <a href="{% url 'listing' listing.id %}">
+                    {{listing.title}} {% if listing.is_closed %}(Closed){% endif %}
+                </a>
+                <ul>
+                    <li>{{listing.description}}</li>
+                    {% if listing.image_url %}
+                        <img src="{{listing.image_url}}" width=100px height=100px>
+                    {% endif %}
+
+                </ul>
+            </li>
+
+
+            {% empty %}
+            <li>Not watching any listings.</li>
+
+            {% endfor %}
+
+        </ul>
+{% endblock %}
