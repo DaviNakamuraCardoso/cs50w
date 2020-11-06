@@ -1,43 +1,104 @@
 {% extends "auctions/layout.html" %}
+
 {% block body %}
+
+{% if message %}
+<div class="alert alert-danger">
+    {{ message }}
+</div>
+{% endif %}
+
+{% if listing.is_closed %}
+    {% if listing.winner == request.user.username %}
+    <div class="alert alert-success">
+        Congratulations, <em>{{ request.user.username }}</em>! You won this auction!
+    </div>
+    {% endif %}
+    <h1>This listing is closed.</h1>
+    <h2>Winner: {{ listing.winner }}</h2>
+
+
+
+{% endif %}
 <h1>{{ listing.title }}</h1>
+{% if listing.user.id == request.user.id %}
+        {% if not listing.is_closed %}
+        <form action="{% url 'listing' listing.id %}" method="post">
+            {% csrf_token %}
+            <input type="submit" name="close_listing" value="Close Listing">
+        </form>
+        {% endif %}
+
+
+{% else %}
+    {% if user in non_watchers %}
+        <form action="{% url 'listing' listing.id %}" method="post">
+            {% csrf_token %}
+            <input type="submit" name="add_watchlist" value="Add Watchlist">
+        </form>
+        {% else %}
+        <form action="{% url 'listing' listing.id %}" method="post">
+            {% csrf_token %}
+            <input type="submit" name="remove_watchlist" value="Remove Watchlist">
+        </form>
+    {% endif %}
+{% endif %}
+
+
+
 
 <h2>Auction by {{ listing.user.username}}</h2>
+    <ul>
+        <li>
+            Start bid: ${{ listing.starting_bid}}
+        </li>
 
-<h3>Start bid: {{ listing.starting_bid}}</h3>
+        <li>
+            Description:
+            <p>{{ listing.description }}</p>
+        </li>
 
-<h3>Description:</h3>
+        <li>
+            {% if listing.category %}
+                Category: {{listing.category}}
+            {% endif %}
+        </li>
+        <li>
 
-<p>{{ listing.description }}</p>
+            {% if listing.image_url %}
+                Image:
+                <img src="{{listing.image_url}}" width=200px height=auto>
+            {% endif %}
+
+        </li>
+
+        <li>
+            Current Bid: ${{listing.current_bid}}
+        </li>
+        <li>
+            Current Winner: {{listing.winner}}
+        </li>
+
+
+    </ul>
 
 
 
-{% if listing.category %}
-    <h3>Category: {{listing.category}}</h3>
-{% endif %}
 
-{% if listing.image_url %}
-    <h3>Image:</h3>
-    <img src="{{listing.image_url}}" width=200px height=auto>
-{% endif %}
-
-<ul>
-    <li>Current Bid: ${{listing.current_bid}}</li>
-    <li>Current Winner: {{listing.winner}}</li>
-
-
-</ul>
 
 
 {% if request.user.username == listing.user.username %}
 
-{% elif user_bid is None %}
-    <form action="{% url 'add_bid' listing.id %}" method="post">
+
+{% elif not listing.is_closed  %}
+    {% if user_bid is None %}
+    <form action="{% url 'listing' listing.id %}" method="post">
         {% csrf_token %}
-        <input type="number" name="bid">
+        <input type="number" name="add_bid" min="{{listing.current_bid}}">
         <input type="submit" value="Make Bid">
 
     </form>
+    {% endif %}
 
 {% endif %}
 
@@ -50,10 +111,17 @@
                 {{ bid.user.username }}
             </a>
             offered $
-            {% if bid.user.username == request.user.username %}
-            
-            {% else %}
                 {{ bid.bid }}
+
+            {% if bid.user.username == request.user.username and not listing.is_closed %}
+            <form action="{% url 'listing' listing.id %}" method="post">
+                {% csrf_token %}
+
+                <input type="number" name="updated_bid" placeholder="{{bid.bid}}" min="{{bid.bid}}">
+                <input type="submit" value="Update Bid">
+
+            </form>
+
 
 
 
@@ -65,7 +133,26 @@
     {% endfor %}
 </ul>
 
-{% if message %}
-<h2>{{ message }}</h2>
-{% endif %}
+
+<h2>Comments:</h2>
+<ul>
+{% for comment in comments %}
+
+    <li>{{ comment.user.username }} commented: </li>
+
+    <ul>
+        <li>{{ comment.comment }}</li>
+
+    </ul>
+
+    {% empty %}
+    <li>No comments yet!</li>
+{% endfor %}
+
+</ul>
+<form action="{% url 'listing' listing.id %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="new_comment" placeholder="Comment here">
+</form>
+
 {% endblock %}

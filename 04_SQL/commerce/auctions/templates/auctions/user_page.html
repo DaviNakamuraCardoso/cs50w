@@ -5,31 +5,7 @@
 <h2>Username: {{ page_user.username }}</h2>
 {% if request.user.username == page_user.username %}
     <a href="{% url 'new' %}">Add Auctions</a>
-    <h2>My bids</h2>
-    <ul>
-    {% for bid in bids %}
-        <li>
-            <ul>
-                <li>
-                    <a href="{% url 'listing' bid.listing.id %}">{{ bid.listing.title }}</a>
-                </li>
-                <li>
-                    Current listing bid: {{ bid.listing.current_bid }}
-                </li>
-
-                {% if bid.listing.winner == request.user.username %}
-                    <li>Winning</li>
-                {% else %}
-                    <li>Loosing</li>
-                {% endif %}
-
-            </ul>
-
-        </li>
-        {% empty %}
-        <li>No active bids.</li>
-    {% endfor %}
-    </ul>
+        
 {% endif %}
 
 <ul>

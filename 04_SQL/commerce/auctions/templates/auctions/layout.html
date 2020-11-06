@@ -22,11 +22,19 @@
             </li>
             {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'user_page' request.user.username %}">My Profile</a>
+                    <a class="nav-link" href="{% url 'user_page' request.user.username %}">Profile</a>
 
+                </li>
+                <li>
+                    <a class="nav-link" href="{% url 'watchlist' request.user.username %}">My watchlist</a>
+                </li>
+
+                <li>
+                    <a class="nav-link" href="{% url 'user_bids' request.user.username %}">My bids</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
                 </li>
             {% else %}
                 <li class="nav-item">

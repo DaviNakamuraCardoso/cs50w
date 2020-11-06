@@ -35,3 +35,6 @@
 - Decorators and lambda
 - Exceptions 
 
+<form action="{% url 'update_bid' listing.id %}">
+
+    

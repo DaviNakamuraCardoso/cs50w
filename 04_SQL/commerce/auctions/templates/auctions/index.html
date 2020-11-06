@@ -2,22 +2,35 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-
+    <h3>Search in: </h3>
+    <form action="{% url 'index' %}" method="post">
+        {% csrf_token %}
+        <input list="categories" name="selected">
+        <datalist id="categories">
+            {% for category in categories %}
+                 <option value="{{category}}"> {{ category }} </option>
+            {% endfor %}
+        </datalist>
+        <input type="submit">
+    </form>
     {% for listing in listings %}
-        <li>
-            <a href="{% url 'listing' listing.id %}">
-                    {{ listing.title }}
-            </a>
-            <ul>
+        {% if not listing.is_closed %}
+            <li>
+                <a href="{% url 'listing' listing.id %}">
+                        {{ listing.title }}
+                </a>
+                <ul>
 
-                <li>Description: {{ listing.description }}</li>
-                <li>Current Bid: {{ listing.current_bid }}</li>
-                {% if listing.image_url %}
-                    <img src="{{ listing.image_url }}" width=150px height=150px>
-                {% endif %}
-            </ul>
-        </li>
+                    <li>Description: {{ listing.description }}</li>
+                    <li>Current Bid: ${{ listing.current_bid }}</li>
+                    {% if listing.image_url %}
+                        <img src="{{ listing.image_url }}" width=150px height=150px>
+                    {% endif %}
+                </ul>
+            </li>
+        {% endif %}
         {% empty %}
         <li>No active Listings.</li>
+
     {% endfor %}
 {% endblock %}
