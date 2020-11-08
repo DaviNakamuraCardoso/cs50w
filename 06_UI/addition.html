@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hello</title>
+        <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+
+    </head>
+    <body>
+        <div id="app"></div>
+        <script type="text/babel">
+            
+            class App extends React.Component {
+
+                constructor(props) {
+                    super(props);
+                    this.state = {
+                        score: 0
+
+
+                    };
+                }
+
+                render() {
+                    return (
+                        <div>
+                            <p>Your score is {this.state.score}</p>
+                        
+                        </div>
+                    );
+                }
+
+            }
+            
+            ReactDOM.render(<App />, document.querySelector("#app"));
+        
+        </script>
+        
+    </body>
+</html>
