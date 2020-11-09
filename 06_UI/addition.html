@@ -6,6 +6,21 @@
         <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
         <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 
+        <style>
+            #app {
+                text-align: center;
+                font-family: sans-serif;
+            }
+
+            #problem {
+                font-size: 100px;
+            }
+
+
+            #winner {
+                font-size: 100px;
+            }
+        </style>
 
     </head>
     <body>
@@ -17,19 +32,77 @@
                 constructor(props) {
                     super(props);
                     this.state = {
-                        score: 0
+                        score: 0, 
+                        num1: 1, 
+                        num2: 1, 
+                        response: ""
 
 
                     };
                 }
 
                 render() {
+
+                    if (this.state.score === 10) {
+                        return (
+                            <div id="winner">
+                                You Won!
+                            
+                            
+                            </div>
+                        ) 
+                    }
                     return (
                         <div>
-                            <p>Your score is {this.state.score}</p>
-                        
-                        </div>
+
+                            <div id="problem"> 
+                                {this.state.num1} + {this.state.num2} 
+                            
+                            </div>
+
+                            <input onKeyPress={this.inputKeyPress} onChange={this.updateResponse} value={this.state.response}/>
+
+                            <div>
+                                <p>Your score is {this.state.score}</p>
+                            
+                            </div>
+
+
+                        </div> 
+
                     );
+                }
+
+                updateResponse = (event) => {
+                    this.setState ({
+                        response: event.target.value
+                    });
+
+                }
+
+                inputKeyPress = (event) => {
+                    if (event.key === 'Enter') {
+                        const answer = parseInt(this.state.response);
+
+                        if (answer === this.state.num1 + this.state.num2) {
+                            this.setState ( state => ({
+                                score: state.score + 1, 
+                                num1: Math.ceil(Math.random() * 10), 
+                                num2: Math.ceil(Math.random() * 10), 
+                                response: ""
+                            }));
+
+                        }
+                        else {
+                            this.setState(state => ({
+                                score: state.score -1, 
+                                response: ""
+                            }));
+
+                        }
+
+
+                    }
                 }
 
             }
