@@ -60,11 +60,11 @@ function load_mailbox(mailbox) {
     emails.forEach(email => {
 
       // Create the basic email elements 
-      const element = document.createElement(`div.${mailbox}`);
+      const element = document.createElement(`div`);
       const title = document.createElement("h3");
       const body = document.createElement("ul");
-      const sender = document.createElement("li.sender");
-      const recipients = document.createElement("li.recipients");
+      const sender = document.createElement("li");
+      const recipients = document.createElement("li");
       const archive = document.createElement("button");
       const read = document.createElement("button");
       const reply = document.createElement("button");
@@ -76,7 +76,13 @@ function load_mailbox(mailbox) {
       recipients.innerHTML = `To: ${email.recipients}`;
       reply.innerHTML = "Reply";
 
-
+      // Define the classes 
+      title.className = "title";
+      archive.className = "post-btn";
+      read.className = "post-btn";
+      reply.className = "post-btn";
+      
+    
 
       
 
@@ -93,10 +99,10 @@ function load_mailbox(mailbox) {
       element.append(reply);
 
       if (email.read) {
-        element.style.color = 'gray';
+        element.className = 'read';
       }
       else {
-        element.style.color = 'red';
+        element.className = 'unread';
       }
 
       // Opens the email when clicked  
@@ -137,6 +143,9 @@ function update_archive(email, button) {
         })
       })
       .then(() => {
+        remove_div(button);
+      })
+      .then(() => {
         load_mailbox('inbox');
       });
     });
@@ -152,14 +161,16 @@ function update_archive(email, button) {
         
       })
       .then(() => {
-        load_mailbox('archive');
+        remove_div(button);
       });
     });
   }
+  
 
 
 
 }
+
 
 
 function update_reads(email, button) {
@@ -197,6 +208,17 @@ function update_reads(email, button) {
   }
 }
 
+
+function remove_div(button) {
+  const div = button.parentElement;
+  div.style.animationPlayState = 'running';
+  div.addEventListener('animationend', () => {
+    div.remove();
+
+  })
+  
+}
+
 function reply_email(email) {
 
   // Show compose view and hide other views
@@ -210,7 +232,7 @@ function reply_email(email) {
 
     
   recipient.value = email.sender;
-  subject.value = `Re: ${email.subject}`;
+  subject.value = `Re: ${email.subject.replace("Re: ", "")}`;
   body.value = `On ${email.timestamp} ${email.sender} wrote: "${email.body}"`;
 
 }
@@ -224,7 +246,7 @@ function send_mail() {
   fetch("/emails", {
     method: 'POST', 
     body: JSON.stringify({
-      recipients: recipients, 
+      recipients: recipients.join(','), 
       subject: subject, 
       body: body
     })
@@ -254,7 +276,7 @@ function get_mail(id) {
     mail.innerHTML = `
     <h2>Subject: ${email.subject}</h2>
     <h3>From: ${email.sender}</h3>
-    <h3>To: ${email.recipients}</h3>
+    <h3>To: ${email.recipients.split(',')}</h3>
     <h6>${email.timestamp}</h6>
 
     <p>${email.body}</p>
