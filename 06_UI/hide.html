@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>HIDE</title>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => { 
+                document.addEventListener('click', event => {
+                    const element = event.target;
+                    if (element.className === 'hide') {
+                        element.parentElement.style.animationPlayState = 'running';
+                        element.parentElement.addEventListener('animationend', () => {
+                            element.parentElement.remove();
+                        });
+                    }
+
+                });
+            });
+
+        </script>
+        <style>
+            @keyframes hide {
+                0% {
+                    opacity: 1;
+                    height: 80px;
+                    line-height: 20px;
+                    padding: 20px;
+                    margin-bottom: 10px;
+
+                }
+
+                75% {
+                    opacity: 0;
+                    height: 80px;
+                    line-height: 20px;
+                    padding: 20px;
+                    margin-bottom: 10px;
+                }
+                100% {
+                    opacity: 0;
+                    height: 0px;
+                    line-height: 0px;
+                    padding: 0px;
+                    margin: 0px;
+                }
+            }
+            .post {
+                margin-top: 0px;
+                display: block;
+                margin-bottom: 10px;
+                padding: 20px;
+                height: 80px;
+                line-height: 20px;
+                background-color: gold;
+                animation-name: hide;
+                animation-duration: 2s;
+                animation-fill-mode: forwards;
+                animation-play-state: paused;
+            }
+            body {
+                margin: 0px;
+                padding: 0px;
+            }
+        </style>
+
+
+    </head>
+    <body>
+        <div class="post">
+            <h1>Post 1</h1>
+            <button class="hide">Hide</button>
+
+        </div>
+        <div class="post">
+            <h1>Post 2</h1>
+            <button class="hide">Hide</button>
+
+        </div>
+        <div class="post">
+            <h1>Post 3</h1>
+            <button class="hide">Hide</button>
+
+        </div>
+        <div class="post">
+            <h1>Post 4</h1>
+            <button class="hide">Hide</button>
+
+        </div>
+
+
+
+        
+    </body>
+</html>
