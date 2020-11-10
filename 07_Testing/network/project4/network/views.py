@@ -105,48 +105,6 @@ def new_post(request):
     return JsonResponse({"message": "Successfully posted."},  status=201)
 
 
-@csrf_exempt 
-@login_required 
-def like_post(request):
-    if request.method == "PUT":
-        
-        # Loading the JSON data from the JavaScript fetch
-        data = json.loads(request.body)
-
-
-        # Getting the post id
-        post_id = data.get("id", "")
-        is_dislike = data.get("dislike", "")
-
-        # 
-        user = request.user
-        post = Post.objects.get(id=post_id)
-
-        
-        if not is_dislike:
-            user.like(post=post) 
-            
-        else: 
-            user.dislike(post=post)
-
-        user.save()
-        post.save()
-        return HttpResponse(status=204)
-    else: 
-        return HttpResponse(status=400)
-        
-
-    
-def get_current_user(request):
-    return JsonResponse(request.user.serialize(), status=200)
-
-
-    
-
-
-
-
-
 
 
 

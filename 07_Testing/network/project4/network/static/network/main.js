@@ -93,13 +93,6 @@ function get_page(page) {
 
             
             // When clicked, the buttons call the post like function
-            like.onclick = () => {
-                like_post(like, post, false);
-            }
-
-            dislike.onclick = () => {
-                like_post(dislike, post, true);
-            }
 
             // Adding the subelements to the main div 
             div.append(username);
@@ -122,33 +115,6 @@ function get_page(page) {
 
 
 
-function like_post(button, post, is_dislike) {
-
-    let number = 0;
-    if (is_dislike) {
-        number = post.dislikes;
-    }
-    else {
-        number = post.likes;
-    }
-    button.innerHTML = number + 1;
-
-    
-    
-
-    fetch("/like", {
-        method: "PUT", 
-        body: JSON.stringify({
-            dislike: is_dislike, 
-            id: post.id
-        }) 
-        
-
-    })
-    
-    
-    
-}
 
 
 
