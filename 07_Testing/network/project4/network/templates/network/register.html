@@ -10,18 +10,38 @@
 
     <form action="{% url 'register' %}" method="post">
         {% csrf_token %}
+        <!-- First Name -->
+        <div class="form-group">
+            <input class="form-control" type="text" name="first" placeholder="Firstname">
+        </div>
+
+        <!-- Last Name -->
+        <div class="form-group">
+            <input class="form-control" type="text" name="last" placeholder="Last Name">
+        </div>
+
+        <!-- Username -->
         <div class="form-group">
             <input class="form-control" autofocus type="text" name="username" placeholder="Username">
         </div>
+
+        <!-- Email -->
         <div class="form-group">
             <input class="form-control" type="email" name="email" placeholder="Email Address">
         </div>
+
+        <!-- Password -->
         <div class="form-group">
             <input class="form-control" type="password" name="password" placeholder="Password">
         </div>
+
+        <!-- Password Confirmation -->
         <div class="form-group">
             <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
         </div>
+
+
+        <!-- Submit button -->
         <input class="btn btn-primary" type="submit" value="Register">
     </form>
 

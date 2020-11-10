@@ -2,6 +2,7 @@
 
 {% block body %}
 
+    {% if user.is_authenticated %}
     <div id="message"></div>
     <div id="new-post">
         <form method="post">
@@ -13,6 +14,7 @@
 
         
     </div>
+    {% endif %}
 
 
     <div id="post-container">

@@ -53,6 +53,8 @@ def logout_view(request):
 
 def register(request):
     if request.method == "POST":
+        first_name = request.POST["first"]
+        last_name = request.POST["last"]
         username = request.POST["username"]
         email = request.POST["email"]
 
@@ -66,7 +68,13 @@ def register(request):
 
         # Attempt to create new user
         try:
-            user = User.objects.create_user(username, email, password)
+            user = User(
+                username=username, 
+                first=first_name, 
+                last=last_name, 
+                password=password, 
+                email=email
+            )
             user.save()
         except IntegrityError:
             return render(request, "network/register.html", {
@@ -97,6 +105,43 @@ def new_post(request):
     return JsonResponse({"message": "Successfully posted."},  status=201)
 
 
+@csrf_exempt 
+@login_required 
+def like_post(request):
+    if request.method == "PUT":
+        
+        # Loading the JSON data from the JavaScript fetch
+        data = json.loads(request.body)
+
+
+        # Getting the post id
+        post_id = data.get("id", "")
+        is_dislike = data.get("dislike", "")
+
+        # 
+        user = request.user
+        post = Post.objects.get(id=post_id)
+
+        
+        if not is_dislike:
+            user.like(post=post) 
+            
+        else: 
+            user.dislike(post=post)
+
+        user.save()
+        post.save()
+        return HttpResponse(status=204)
+    else: 
+        return HttpResponse(status=400)
+        
+
+    
+def get_current_user(request):
+    return JsonResponse(request.user.serialize(), status=200)
+
+
+    
 
 
 

@@ -2,6 +2,9 @@
 // Waiting for the DOM to load 
 document.addEventListener("DOMContentLoaded", () => {
 
+    get_page(1);
+
+
     // Getting the publish button 
     const publish = document.querySelector("#publish");
     const text = document.querySelector("#post");
@@ -14,7 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
     form.onsubmit = post;
 
 
-    get_page(1);
 
 
 
@@ -52,6 +54,10 @@ function post() {
     
 }
 
+
+
+
+
 function get_page(page) {
     const post_container = document.querySelector("#post-container");
 
@@ -60,25 +66,47 @@ function get_page(page) {
     .then(posts => {
         posts.forEach(post => {
 
+
             // Creating the post 
             const div = document.createElement('div');
             const username = document.createElement('h3');
             const body = document.createElement('p');
+            const timestamp = document.createElement('p');
+            const like = document.createElement('button');
+            const dislike = document.createElement('button');
 
             // Setting the classes 
             div.className = `post-div`;
             username.className = 'post-username';
             body.className = 'post-body';
+            timestamp.className = 'post-timestamp';
+            like.className = 'post-like';
+            dislike.className = 'post-dislike';
 
 
             // Filling the elements with the informations 
             username.innerHTML = post.user;
             body.innerHTML = post.post;
+            timestamp.innerHTML = post.timestamp;
+            like.innerHTML = post.likes;
+            dislike.innerHTML = post.dislikes; 
 
+            
+            // When clicked, the buttons call the post like function
+            like.onclick = () => {
+                like_post(like, post, false);
+            }
+
+            dislike.onclick = () => {
+                like_post(dislike, post, true);
+            }
 
             // Adding the subelements to the main div 
             div.append(username);
             div.append(body);
+            div.append(timestamp);
+            div.append(like);
+            div.append(dislike);
 
 
             post_container.append(div);
@@ -90,6 +118,36 @@ function get_page(page) {
 
         });
     });
+}
+
+
+
+function like_post(button, post, is_dislike) {
+
+    let number = 0;
+    if (is_dislike) {
+        number = post.dislikes;
+    }
+    else {
+        number = post.likes;
+    }
+    button.innerHTML = number + 1;
+
+    
+    
+
+    fetch("/like", {
+        method: "PUT", 
+        body: JSON.stringify({
+            dislike: is_dislike, 
+            id: post.id
+        }) 
+        
+
+    })
+    
+    
+    
 }
 
 
