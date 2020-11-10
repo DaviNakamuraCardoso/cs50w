@@ -1,5 +1,21 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    TODO
+
+    <div id="message"></div>
+    <div id="new-post">
+        <form method="post">
+            {% csrf_token %}
+            <input id="post" name="post" type="text">
+            <input id="publish" type="submit">  
+
+        </form>
+
+        
+    </div>
+
+
+    <div id="post-container">
+
+    </div>
 {% endblock %}
