@@ -91,18 +91,13 @@ function get_page(page) {
 
     // Getting the main elements
     const post_container = document.querySelector("#post-container");
+    const old_nodes = post_container.childNodes;
+
 
 
 
     // Removing the posts from the previous page 
-    post_container.childNodes.forEach(node => {
-        console.log(node.className);
-        if (node.className == "post-div") {
-            node.style.animationPlayState = "running";
-        }
-
-    });
-    
+    post_container.style.className = "hide-post";
 
     // Generating the new posts based on the API response 
     fetch(`/pages/${page}`)
@@ -136,11 +131,6 @@ function get_page(page) {
             dislike.innerHTML = "Dislike"; 
 
             
-            // Event listeners 
-            div.addEventListener("animationend", () => {
-                div.remove();
-            }); 
-
             // Adding the subelements to the main div 
             div.append(username);
             div.append(body);
@@ -187,3 +177,5 @@ function activate_button(button, form) {
         }
     }
 }
+
+

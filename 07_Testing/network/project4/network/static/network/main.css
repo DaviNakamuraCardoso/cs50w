@@ -1,23 +1,50 @@
-.post-div {
-    animation-name: hide;
-    animation-play-state: paused;
-    animation-fill-mode: forwards;
-    animation-duration: 2s;
+#post-container {
+    display: block;
 }
 
 
+
+.post-div {
+
+    animation-name: show;
+    animation-play-state: running;
+    animation-fill-mode: forwards;
+    animation-duration: 2s;
+    text-align: center;
+    position: relative;
+}
+
+
+.hide-post {
+    animation-name: hide;
+    animation-play-state: running;
+    animation-fill-mode: forwards;
+    animation-duration: 6s;
+    text-align: center;
+    position: relative;
+}
+
 @keyframes hide {
     0% {
-        height: 100px;
-        line-height: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
+        left: 0%;
+        opacity: 1;
         
     }
     100% {
-        height: 0px;
-        line-height: 0px;
-        padding: 0px;
-        margin-bottom: 0px;
+        left: -100%;
+        opacity: 0;
+    }
+}
+
+
+@keyframes show {
+    0% {
+        opacity: 0;
+        left: 100%;
+    }
+
+    100% {
+        opacity: 1;
+        left: 0%;
     }
 }
