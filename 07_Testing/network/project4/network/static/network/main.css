@@ -2,16 +2,21 @@
     display: block;
 }
 
-
+.show-post {
+    left: 0%;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 
 .post-div {
 
     animation-name: show;
     animation-play-state: running;
     animation-fill-mode: forwards;
-    animation-duration: 2s;
-    text-align: center;
-    position: relative;
+    animation-duration: 2s;                                                                                                                                                                                                                                                                                                                                                                     
+    text-align: center;                 
+    position: relative;                 
+    display: flex;
+    flex-flow: column wrap;
+
 }
 
 
@@ -19,18 +24,22 @@
     animation-name: hide;
     animation-play-state: running;
     animation-fill-mode: forwards;
-    animation-duration: 6s;
+    animation-duration: 2s;
     text-align: center;
     position: relative;
+    display: flex;
+    flex-flow: column wrap;
 }
 
 @keyframes hide {
     0% {
+        height: 100%;
         left: 0%;
         opacity: 1;
         
     }
     100% {
+        height: 0%; 
         left: -100%;
         opacity: 0;
     }

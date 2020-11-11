@@ -91,75 +91,111 @@ function get_page(page) {
 
     // Getting the main elements
     const post_container = document.querySelector("#post-container");
-    const old_nodes = post_container.childNodes;
-
-
-
 
     // Removing the posts from the previous page 
-    post_container.style.className = "hide-post";
-
-    // Generating the new posts based on the API response 
-    fetch(`/pages/${page}`)
-    .then(response => response.json())
-    .then(posts => {
-        posts.forEach(post => {
-
-
-            // Creating the post 
-            const div = document.createElement('div');
-            const username = document.createElement('h3');
-            const body = document.createElement('p');
-            const timestamp = document.createElement('p');
-            const like = document.createElement('button');
-            const dislike = document.createElement('button');
-
-            // Setting the classes 
-            div.className = `post-div`;
-            username.className = 'post-username';
-            body.className = 'post-body';
-            timestamp.className = 'post-timestamp';
-            like.className = 'post-like';
-            dislike.className = 'post-dislike';
-
-
-            // Filling the elements with the informations 
-            username.innerHTML = post.user;
-            body.innerHTML = post.post;
-            timestamp.innerHTML = post.timestamp;
-            like.innerHTML = "Like";
-            dislike.innerHTML = "Dislike"; 
-
-            
-            // Adding the subelements to the main div 
-            div.append(username);
-            div.append(body);
-            div.append(timestamp);
-            div.append(like);
-            div.append(dislike);
-            
-
-
-            post_container.append(div);
-            
-
-
-
-
+    post_container.childNodes.forEach(node => {
+        node.className = "hide-post";
+        node.addEventListener("animationend", () => {
+            node.remove();
 
         });
     });
 
-}
 
+
+    
+
+        fetch(`/pages/${page}`)
+        .then(response => response.json())
+        .then(posts => {
+            posts.forEach(post => {
+
+
+                // Creating the post 
+                const div = document.createElement('div');
+                const username = document.createElement('h3');
+                const body = document.createElement('p');
+                const timestamp = document.createElement('p');
+                const like = document.createElement('button');
+                const dislike = document.createElement('button');
+
+                // Setting the classes 
+                div.className = `post-div`;
+                username.className = 'post-username';
+                body.className = 'post-body';
+                timestamp.className = 'post-timestamp';
+                like.className = 'post-like';
+                dislike.className = 'post-dislike';
+
+
+                // Filling the elements with the informations 
+                username.innerHTML = post.user;
+                body.innerHTML = post.post;
+                timestamp.innerHTML = post.timestamp;
+                like.innerHTML = "Like";
+                dislike.innerHTML = "Dislike"; 
+
+                
+                // Event listeners 
+                username.addEventListener("click", () => {
+                    get_user(post.user);
+                });
+
+
+                // Adding the subelements to the main div 
+                div.append(username);
+                div.append(body);
+                div.append(timestamp);
+                div.append(like);
+                div.append(dislike);
+                
+
+
+                post_container.append(div);
+
+                
+
+
+
+
+
+            });
+        });
+
+
+    
+}
 
 
 function get_user(username) {
     fetch(`/users/${username}`)
     .then(response => response.json())
     .then(user => {
+        // Getting the main elements 
+        const container = document.querySelector("#user_page");
+        const posts = document.querySelector("#post-container");
+
+
+        // Showing the user page and hiding the posts 
+        posts.className = "hide-post";
+        container.className = "post-div";
+        // Creating the user page elements
         const title = document.createElement("h1");
         const h2 = document.createElement("h2");
+
+
+        // Adding the informations
+        title.innerHTML = `${user.first} ${user.last}`;
+        h2.innerHTML = user.username;
+
+
+        // Adding the elements to the main div
+        container.append(title);
+        container.append(h2);
+
+
+
+
         
 
     });
