@@ -18,7 +18,7 @@ def index(request):
 
 
 def get_page(request, page):
-    posts = Post.objects.all().order_by("-id")[1*(page-1):page*10]
+    posts = Post.objects.all().order_by("-id")[10*(page-1):page*10]
     return JsonResponse([post.serialize() for post in posts],  safe=False)
 
 
@@ -106,6 +106,13 @@ def new_post(request):
 
 
 
+def get_user(request, username):
+    try:
+        user = User.objects.get(username=username)
+    except: 
+        return HttpResponse(status=404)
+
+    return JsonResponse(user.serialize(), status=200)
 
 
 

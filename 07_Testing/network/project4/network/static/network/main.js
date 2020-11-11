@@ -1,20 +1,49 @@
 
 // Waiting for the DOM to load 
 document.addEventListener("DOMContentLoaded", () => {
+    let page = 1;
 
-    get_page(1);
+    get_page(page);
 
 
     // Getting the publish button 
     const publish = document.querySelector("#publish");
     const text = document.querySelector("#post");
     const form = document.querySelector("#new-post");
+    const footer = document.querySelector("#footer");
 
 
     publish.disabled = true;
 
     activate_button(publish, text);
     form.onsubmit = post;
+
+    // Creating the buttons to switch pages 
+    const previous = document.createElement("button");
+    const next = document.createElement("button");
+
+    // Labels 
+    previous.innerHTML = "Previous Page";
+    next.innerHTML = "Next Page";
+
+
+    if (page >= 1) {
+        previous.disabled = true;
+
+    }
+    previous.onclick = () => {
+        get_page(page - 1);
+        page--;
+    }
+    next.onclick = () => {
+        get_page(page + 1);
+        page++;
+        previous.disabled = false;
+    }
+
+
+    footer.append(previous);
+    footer.append(next);
 
 
 
@@ -59,8 +88,23 @@ function post() {
 
 
 function get_page(page) {
+
+    // Getting the main elements
     const post_container = document.querySelector("#post-container");
 
+
+
+    // Removing the posts from the previous page 
+    post_container.childNodes.forEach(node => {
+        console.log(node.className);
+        if (node.className == "post-div") {
+            node.style.animationPlayState = "running";
+        }
+
+    });
+    
+
+    // Generating the new posts based on the API response 
     fetch(`/pages/${page}`)
     .then(response => response.json())
     .then(posts => {
@@ -88,11 +132,14 @@ function get_page(page) {
             username.innerHTML = post.user;
             body.innerHTML = post.post;
             timestamp.innerHTML = post.timestamp;
-            like.innerHTML = post.likes;
-            dislike.innerHTML = post.dislikes; 
+            like.innerHTML = "Like";
+            dislike.innerHTML = "Dislike"; 
 
             
-            // When clicked, the buttons call the post like function
+            // Event listeners 
+            div.addEventListener("animationend", () => {
+                div.remove();
+            }); 
 
             // Adding the subelements to the main div 
             div.append(username);
@@ -100,6 +147,7 @@ function get_page(page) {
             div.append(timestamp);
             div.append(like);
             div.append(dislike);
+            
 
 
             post_container.append(div);
@@ -111,10 +159,21 @@ function get_page(page) {
 
         });
     });
+
 }
 
 
 
+function get_user(username) {
+    fetch(`/users/${username}`)
+    .then(response => response.json())
+    .then(user => {
+        const title = document.createElement("h1");
+        const h2 = document.createElement("h2");
+        
+
+    });
+}
 
 
 
