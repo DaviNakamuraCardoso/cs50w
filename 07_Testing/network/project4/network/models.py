@@ -6,6 +6,9 @@ class User(AbstractUser):
     first = models.CharField(max_length=64, default="")
     last = models.CharField(max_length=64, default="")
 
+    followers = models.JSONField(default="") 
+    following = models.JSONField(default="")
+
 
     def __str__(self):
         return f"{self.first} {self.last} ({self.username})"
@@ -22,17 +25,36 @@ class User(AbstractUser):
         dislike.save()
 
 
+    def follow(self, user):
+        if self.username != user.username:
+            self.following.add(user)
+            user.followers.add(self)
+            self.save()
+            user.save()
+    
+
+    def unfollow(self, user):
+        if self.username != user.username:
+            self.following.all().get(username=user.username).delete()
+            user.followers.all().get(username=self.username).delete()
+            self.save()
+            user.save()
+
 
     def serialize(self):
         return {
             "likes":[like.post.id for like in self.user_likes.all().filter(is_dislike=False)], 
             "dislikes": [dislike.post.id for dislike in self.user_likes.all().filter(is_dislike=True)],
             "posts":[post.id for post in self.posts.all()],
+            "followers":[username for user in self.followers], 
+            "following": [username for user in self.following], 
+            "followers_num": len(self.followers), 
             "first":self.first, 
             "last":self.last, 
             "username":self.username, 
             "email":self.email, 
-            "id": self.id
+            "id": self.id, 
+            "message": "Logged."
 
         }
 

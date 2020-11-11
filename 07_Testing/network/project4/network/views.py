@@ -115,7 +115,33 @@ def get_user(request, username):
     return JsonResponse(user.serialize(), status=200)
 
 
+def current_user(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"message": "Not logged."}, status=200)
+    else:
+        return JsonResponse(request.user.serialize(), status=200)
 
+
+
+@csrf_exempt 
+@login_required 
+def follow_user(request, username): 
+    user = User.objects.get(username=username)
+    if request.method == "PUT":
+        try: 
+            data = json.loads(request.body)
+            if data.get("unfollow") is not None:
+                if data["unfollow"]:
+                    request.user.unfollow(user)
+
+                else: 
+                    request.user.follow(user)
+    
+                return JsonResponse({"success": True})
+            else: 
+                return HttpResponse(status=400)
+        except ConnectionResetError: 
+            pass
 
 
 

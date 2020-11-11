@@ -1,55 +1,76 @@
 
 // Waiting for the DOM to load 
 document.addEventListener("DOMContentLoaded", () => {
-    let page = 1;
 
-    get_page(page);
-
-
-    // Getting the publish button 
-    const publish = document.querySelector("#publish");
-    const text = document.querySelector("#post");
-    const form = document.querySelector("#new-post");
-    const footer = document.querySelector("#footer");
+    fetch("/current_user")
+    .then(response => response.json())
+    .then(user => {
+        if (user.message === "Not logged.")
+        {
 
 
-    publish.disabled = true;
+        }
+        else {
 
-    activate_button(publish, text);
-    form.onsubmit = post;
+        let page = 1;
+    
+    
 
-    // Creating the buttons to switch pages 
-    const previous = document.createElement("button");
-    const next = document.createElement("button");
-
-    // Labels 
-    previous.innerHTML = "Previous Page";
-    next.innerHTML = "Next Page";
-
-
-    if (page >= 1) {
-        previous.disabled = true;
-
-    }
-    previous.onclick = () => {
-        get_page(page - 1);
-        page--;
-    }
-    next.onclick = () => {
-        get_page(page + 1);
-        page++;
-        previous.disabled = false;
-    }
-
-
-    footer.append(previous);
-    footer.append(next);
+        get_page(user, page);
 
 
 
 
+        // Getting the publish button 
+        const publish = document.querySelector("#publish");
+        const text = document.querySelector("#post");
+        const form = document.querySelector("#new-post");
+        const footer = document.querySelector("#footer");
+        const profile = document.querySelector("#profile");
 
 
+        publish.disabled = true;
+
+        activate_button(publish, text);
+        form.onsubmit = post;
+        profile.onclick = () => {
+            get_user(user, profile.innerHTML);
+        }
+
+        // Creating the buttons to switch pages 
+        const previous = document.createElement("button");
+        const next = document.createElement("button");
+
+        // Labels 
+        previous.innerHTML = "Previous Page";
+        next.innerHTML = "Next Page";
+
+
+        if (page >= 1) {
+            previous.disabled = true;
+
+        }
+        previous.onclick = () => {
+            get_page(user, page - 1);
+            page--;
+        }
+        next.onclick = () => {
+            get_page(user, page + 1);
+            page++;
+            previous.disabled = false;
+        }
+
+
+        footer.append(previous);
+        footer.append(next);
+
+
+
+
+        }
+        
+
+    });
 
 
 
@@ -87,18 +108,20 @@ function post() {
 
 
 
-function get_page(page) {
+function get_page(user, page) {
 
     // Getting the main elements
     const post_container = document.querySelector("#post-container");
+    const user_page = document.querySelector("#user_page");
+
 
     // Removing the posts from the previous page 
+    remove_div(user_page);
     post_container.childNodes.forEach(node => {
-        node.className = "hide-post";
-        node.addEventListener("animationend", () => {
-            node.remove();
+        remove_div(node);
 
-        });
+            
+
     });
 
 
@@ -135,10 +158,14 @@ function get_page(page) {
                 like.innerHTML = "Like";
                 dislike.innerHTML = "Dislike"; 
 
+
+                
+
+
                 
                 // Event listeners 
                 username.addEventListener("click", () => {
-                    get_user(post.user);
+                    get_user(user, post.user);
                 });
 
 
@@ -146,14 +173,21 @@ function get_page(page) {
                 div.append(username);
                 div.append(body);
                 div.append(timestamp);
-                div.append(like);
-                div.append(dislike);
                 
 
 
                 post_container.append(div);
 
-                
+                if (post.user == user.username) {
+                    div.style.border = "2px solid blue";
+
+
+                }       
+                else {
+                    div.append(like);
+                    div.append(dislike);
+
+                }
 
 
 
@@ -167,40 +201,47 @@ function get_page(page) {
 }
 
 
-function get_user(username) {
-    fetch(`/users/${username}`)
-    .then(response => response.json())
-    .then(user => {
-        // Getting the main elements 
-        const container = document.querySelector("#user_page");
-        const posts = document.querySelector("#post-container");
 
+function follow_user(user, button) {
+    fetch(`/follow/${user.username}`, {
+        method: "PUT", 
+        body: JSON.stringify({
+            unfollow: false
 
-        // Showing the user page and hiding the posts 
-        posts.className = "hide-post";
-        container.className = "post-div";
-        // Creating the user page elements
-        const title = document.createElement("h1");
-        const h2 = document.createElement("h2");
-
-
-        // Adding the informations
-        title.innerHTML = `${user.first} ${user.last}`;
-        h2.innerHTML = user.username;
-
-
-        // Adding the elements to the main div
-        container.append(title);
-        container.append(h2);
-
-
-
-
-        
-
-    });
+            
+        })
+    })
+    button.innerHTML = `Following: ${user.followers_num + 1}`;
+    button.style.color = "blue";
 }
 
+
+function unfollow_user(user, button) {
+    fetch(`/follow/${user}`, {
+        method: "PUT", 
+        body: JSON.stringify({
+            unfollow:true
+        })
+    })
+    button.innerHTML = `Follow: ${user.followers_num - 1}`;
+    button.style.color = "black";
+            
+}
+
+function remove_div(div) {
+    div.className = "hide-post";
+    div.addEventListener("animationend", () => {
+        div.style.display = 'none';
+    })
+}
+
+function show_div(div) {
+    div.style.display = "flex";
+    div.className = "post-div";
+    div.addEventListener("animationend", () => {
+        div.style.display = "flex";
+    });
+}
 
 
 function activate_button(button, form) {
