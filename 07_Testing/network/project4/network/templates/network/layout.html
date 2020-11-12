@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -16,7 +15,7 @@
               <ul class="navbar-nav mr-auto">
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <strong><a class="nav-link" id="profile" href="{% url 'user_page' request.user.username %}">{{ request.user.username }}</a></strong>
+                        <strong><a class="nav-link" id="profile" href="#">{{ request.user.username }}</a></strong>
                     </li>
                 {% endif %}
                 <li class="nav-item">

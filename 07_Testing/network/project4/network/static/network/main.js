@@ -26,12 +26,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const text = document.querySelector("#post");
         const form = document.querySelector("#new-post");
         const footer = document.querySelector("#footer");
+        const profile = document.querySelector("#profile");
 
 
         publish.disabled = true;
 
-        activate_button(publish, text);
+
+        // Event listeners 
         form.onsubmit = post;
+        profile.addEventListener("click", () => {
+            get_user_page(user, user.username);
+        });
+        activate_button(publish, text);
 
         // Creating the buttons to switch pages 
         const previous = document.createElement("button");
@@ -73,9 +79,48 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 
+function get_user_page(current_user, username) {
+
+    const user_page = document.querySelector("#user_page");
+    remove_div(user_page);
+    user_page.innerHTML = "";
+
+    fetch(`/users/${username}`)
+    .then(response => response.json()) 
+    .then(result => {
+
+        // Creating main element
+        const user = result.user;
+        const title = document.createElement("h1");
+        const h2 = document.createElement("h2");
+        const followers = document.createElement("h3");
+
+        // Adding the information in the elements 
+        title.innerHTML = `${user.first} ${user.last}`;
+        h2.innerHTML = user.username;
+        followers.innerHTML = user.followers_num;
+
+        // Appending to the main div
+        user_page.append(title);
+        user_page.append(h2);
+
+        //
+        
+        show_div(user_page);
+        
+        get_page(`user_posts/${username}`, current_user, 1);
+        
+        
+
+        
 
 
 
+    });
+
+        
+    
+}
 
 function post() {
     // Getting the post content and the message container
@@ -105,17 +150,13 @@ function post() {
 
 
 
-
-
 function get_page(path, current_user, page) {
 
     // Getting the main elements
     const post_container = document.querySelector("#post-container");
-    const user_page = document.querySelector("#user_page");
 
 
     // Removing the posts from the previous page 
-    remove_div(user_page);
     post_container.childNodes.forEach(node => {
         remove_div(node);
 
@@ -151,7 +192,7 @@ function get_page(path, current_user, page) {
 
 
                 // Filling the elements with the informations 
-                username.innerHTML = `<a href="/users/${post.user}">${post.user}</a>`;
+                username.innerHTML = post.user;
                 body.innerHTML = post.post;
                 timestamp.innerHTML = post.timestamp;
                 like.innerHTML = `Like: ${post.likes}`;
@@ -160,7 +201,7 @@ function get_page(path, current_user, page) {
                 
                 // Event listeners 
                 username.addEventListener("click", () => {
-                    get_user(user, post.user);
+                    get_user_page(current_user, post.user);
                 });
 
 

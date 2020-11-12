@@ -122,9 +122,15 @@ def current_user(request):
         return JsonResponse(request.user.serialize(), status=200)
 
 def user_page(request, username):
-    return render(request, "network/user_page.html", {
-        "user": User.objects.get(username=username)
-    })
+    return JsonResponse({"user": User.objects.get(username=username).serialize()}, status=200, safe=False)
+
+
+def user_posts(request, username, page):
+    user = User.objects.get(username=username)
+    posts = user.posts.all().order_by("-id")[(page-1)*10:page*10]
+    return JsonResponse([post.serialize() for post in posts], status=200, safe=False)
+    
+
 
 
 @csrf_exempt 
