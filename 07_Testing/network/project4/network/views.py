@@ -142,13 +142,13 @@ def like_post(request, post_id):
                 request.user.like(post)
             else: 
                 request.user.unlike(post)
-            return HttpResponse(status=204)
         elif data.get("dislike") is not None: 
             if data["dislike"]:
                 request.user.dislike(post)
             else: 
                 request.user.undo_dislike(post)
-            return HttpResponse(status=204)
+
+        return JsonResponse({"result": post.serialize()}, status=204, safe=False)
 
 
 

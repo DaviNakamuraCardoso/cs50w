@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     
 
-        get_page(user, page);
+        get_page("pages", user, page);
 
 
 
@@ -42,16 +42,16 @@ document.addEventListener("DOMContentLoaded", () => {
         next.innerHTML = "Next Page";
 
 
-        if (page >= 1) {
+        if (page <= 1) {
             previous.disabled = true;
 
         }
         previous.onclick = () => {
-            get_page(user, page - 1);
+            get_page("pages", user, page - 1);
             page--;
         }
         next.onclick = () => {
-            get_page(user, page + 1);
+            get_page("pages", user, page + 1);
             page++;
             previous.disabled = false;
         }
@@ -71,6 +71,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 })
+
+
+
 
 
 
@@ -104,7 +107,7 @@ function post() {
 
 
 
-function get_page(current_user, page) {
+function get_page(path, current_user, page) {
 
     // Getting the main elements
     const post_container = document.querySelector("#post-container");
@@ -124,7 +127,7 @@ function get_page(current_user, page) {
 
     
 
-        fetch(`/pages/${page}`)
+        fetch(`/${path}/${page}`)
         .then(response => response.json())
         .then(posts => {
             posts.forEach(post => {
@@ -243,11 +246,12 @@ function like_post(like_button, dislike_button, post, undo) {
         body: JSON.stringify({
            like: true 
         })
-    })
 
-    fetch(`posts/${post.id}`)
-    .then(response => response.json())
-    .then(result => {
+    })
+    .then(() => {
+        fetch(`/posts/${post.id}`)
+        .then(response => response.json())
+        .then(result => {
         // Setting the user view for likes 
         like_button.style.color = "blue";
         like_button.innerHTML = `Like: ${post.likes + 1}`;
@@ -267,7 +271,8 @@ function like_post(like_button, dislike_button, post, undo) {
         }
 
 
-    });
+    });})
+        
 
     
 
@@ -283,6 +288,7 @@ function dislike_post(like_button, dislike_button, post, undo) {
             dislike: true  
         })
     })
+    .then(() => {
 
     fetch(`/posts/${post.id}`)
     .then(response => response.json())
@@ -303,7 +309,7 @@ function dislike_post(like_button, dislike_button, post, undo) {
         if (undo) {
             like_button.innerHTML = `Like: ${post.likes - 1}`;
         }
-    });
+    });})
 
 }
 
@@ -315,6 +321,7 @@ function undo_like(like_button, dislike_button,  post) {
             like: false
         })
     })
+    .then(() => {
     fetch(`/posts/${post.id}`)
     .then(response => response.json())
     .then(result => {
@@ -327,7 +334,7 @@ function undo_like(like_button, dislike_button,  post) {
         }
 
 
-    });
+    });})
 }
 
 
@@ -338,6 +345,7 @@ function undo_dislike(like_button, dislike_button, post) {
             dislike: false
         })
     })
+    .then(() => {
     fetch(`/posts/${post.id}`)
     .then(response => response.json())
     .then(result => {
@@ -351,12 +359,9 @@ function undo_dislike(like_button, dislike_button, post) {
         }
 
 
-    });
+    });})
 
 }
-
-
-
 
             
 
