@@ -1,0 +1,21 @@
+{% extends "network/layout.html" %}
+
+
+{% block body %}
+
+    <h1>{{ user.first }} {{ user.last }}</h1>
+    <h2>{{ user.username }}</h2>
+    {% if request.user.username != user.username %}
+
+    
+    <button>Follow</button>
+    {% endif %}
+    
+
+
+
+
+
+
+
+{% endblock %}
