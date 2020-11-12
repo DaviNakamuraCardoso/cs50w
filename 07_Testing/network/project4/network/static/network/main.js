@@ -26,16 +26,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const text = document.querySelector("#post");
         const form = document.querySelector("#new-post");
         const footer = document.querySelector("#footer");
-        const profile = document.querySelector("#profile");
 
 
         publish.disabled = true;
 
         activate_button(publish, text);
         form.onsubmit = post;
-        profile.onclick = () => {
-            get_user(user, profile.innerHTML);
-        }
 
         // Creating the buttons to switch pages 
         const previous = document.createElement("button");
@@ -108,7 +104,7 @@ function post() {
 
 
 
-function get_page(user, page) {
+function get_page(current_user, page) {
 
     // Getting the main elements
     const post_container = document.querySelector("#post-container");
@@ -152,16 +148,12 @@ function get_page(user, page) {
 
 
                 // Filling the elements with the informations 
-                username.innerHTML = post.user;
+                username.innerHTML = `<a href="/users/${post.user}">${post.user}</a>`;
                 body.innerHTML = post.post;
                 timestamp.innerHTML = post.timestamp;
-                like.innerHTML = "Like";
-                dislike.innerHTML = "Dislike"; 
-
-
+                like.innerHTML = `Like: ${post.likes}`;
+                dislike.innerHTML = `Dislike: ${post.dislikes}`; 
                 
-
-
                 
                 // Event listeners 
                 username.addEventListener("click", () => {
@@ -178,7 +170,7 @@ function get_page(user, page) {
 
                 post_container.append(div);
 
-                if (post.user == user.username) {
+                if (post.user == current_user.username) {
                     div.style.border = "2px solid blue";
 
 
@@ -187,6 +179,36 @@ function get_page(user, page) {
                     div.append(like);
                     div.append(dislike);
 
+                }
+
+                if (current_user.liked_posts.some(post_id => post_id == post.id)) {
+                    like.style.color = "blue";
+                    dislike.onclick = () => {
+                        dislike_post(like, dislike, post, true);
+                    }
+                    like.onclick = () => {
+                        undo_like(like, dislike, post);
+                    }
+                    
+                }
+                else if (current_user.disliked_posts.some(post_id => post_id == post.id)) {
+                    dislike.style.color = "blue";
+                    like.onclick = () => {
+                        like_post(like, dislike, post, true);
+                    }
+                    dislike.onclick = () => {
+                        undo_dislike(like, dislike, post);
+                    }
+
+                }
+                else {
+                    like.onclick = () => {
+                        
+                        like_post(like, dislike, post, false);
+                    }
+                    dislike.onclick = () => {
+                        dislike_post(like, dislike, post, false);
+                    }
                 }
 
 
@@ -211,22 +233,132 @@ function follow_user(user, button) {
             
         })
     })
-    button.innerHTML = `Following: ${user.followers_num + 1}`;
     button.style.color = "blue";
 }
 
 
-function unfollow_user(user, button) {
-    fetch(`/follow/${user}`, {
+function like_post(like_button, dislike_button, post, undo) {
+    fetch(`/like_post/${post.id}`, {
         method: "PUT", 
         body: JSON.stringify({
-            unfollow:true
+           like: true 
         })
     })
-    button.innerHTML = `Follow: ${user.followers_num - 1}`;
-    button.style.color = "black";
+
+    fetch(`posts/${post.id}`)
+    .then(response => response.json())
+    .then(result => {
+        // Setting the user view for likes 
+        like_button.style.color = "blue";
+        like_button.innerHTML = `Like: ${post.likes + 1}`;
+        like_button.onclick = () => {
+            undo_like(like_button, dislike_button, result.result);
+        }
+
+        // Setting the user view for dislikes
+        dislike_button.style.color = "black";
+
+        dislike_button.onclick = () => {
+            dislike_post(like_button, dislike_button, result.result, true);
+        }
+        if (undo) {
+            dislike_button.innerHTML = `Dislikes: ${post.dislikes - 1}`;
             
+        }
+
+
+    });
+
+    
+
+
 }
+
+
+
+function dislike_post(like_button, dislike_button, post, undo) {
+    fetch(`/like_post/${post.id}`, {
+        method: "PUT", 
+        body: JSON.stringify({
+            dislike: true  
+        })
+    })
+
+    fetch(`/posts/${post.id}`)
+    .then(response => response.json())
+    .then(result => {
+
+        // Setting the user view for dislikes 
+        dislike_button.style.color = "blue";
+        dislike_button.innerHTML = `Dislike: ${post.dislikes + 1}`;
+        dislike_button.onclick = () => {
+            undo_dislike(like_button, dislike_button, result.result);
+        }
+
+        // Setting the user view for likes
+        like_button.style.color = "black";
+        like_button.onclick = () => {
+            like_post(like_button, dislike_button, result.result, true);
+        }
+        if (undo) {
+            like_button.innerHTML = `Like: ${post.likes - 1}`;
+        }
+    });
+
+}
+
+
+function undo_like(like_button, dislike_button,  post) {
+    fetch(`like_post/${post.id}`, {
+        method: "PUT", 
+        body: JSON.stringify({
+            like: false
+        })
+    })
+    fetch(`/posts/${post.id}`)
+    .then(response => response.json())
+    .then(result => {
+        // Setting the user view 
+        like_button.innerHTML = `Like: ${post.likes - 1}`;
+        like_button.style.color = "black";
+
+        dislike_button.onclick = () => {
+            dislike_post(like_button, dislike_button, result.result, false);
+        }
+
+
+    });
+}
+
+
+function undo_dislike(like_button, dislike_button, post) {
+    fetch(`like_post/${post.id}`, {
+        method: "PUT", 
+        body: JSON.stringify({
+            dislike: false
+        })
+    })
+    fetch(`/posts/${post.id}`)
+    .then(response => response.json())
+    .then(result => {
+        // Setting the user view 
+        dislike_button.innerHTML = `Dislike: ${post.dislikes - 1}`;
+        dislike_button.style.color = "black";
+
+
+        like_button.onclick = () => {
+            like_post(like_button, dislike_button, result.result, false);
+        }
+
+
+    });
+
+}
+
+
+
+
+            
 
 function remove_div(div) {
     div.className = "hide-post";

@@ -6,23 +6,48 @@ class User(AbstractUser):
     first = models.CharField(max_length=64, default="")
     last = models.CharField(max_length=64, default="")
 
-    followers = models.JSONField(default="") 
-    following = models.JSONField(default="")
-
-
     def __str__(self):
         return f"{self.first} {self.last} ({self.username})"
 
 
     def like(self, post):
-        like = Like(user=self, post=post, is_dislike=False)
+        try: 
+            dislike = Dislike.objects.get(dislike_post_id=post.id, dislike_user_id=self.id) 
+            dislike.delete()
+            self.save()
+            post.save()
+        except Dislike.DoesNotExist:
+            pass
+            
+
+        like = Like(user=self, post=post, like_user_id=self.id, like_post_id=post.id)
         like.save()
         
-
     
     def dislike(self, post):
-        dislike = Like(user=self, post=post, is_dislike=True)
+        try:
+            like = Like.objects.get(like_post_id = post.id, like_user_id = self.id)
+            like.delete()
+            self.save()
+            post.save()
+        except Like.DoesNotExist:
+            pass 
+        dislike = Dislike(user=self, post=post, dislike_post_id=post.id, dislike_user_id=self.id)
         dislike.save()
+
+    
+    def unlike(self, post):
+        like = Like.objects.get(like_post_id=post.id, like_user_id=self.id)
+        like.delete()
+        self.save()
+        post.save()
+
+    def undo_dislike(self, post):
+        dislike = Dislike.objects.get(dislike_post_id=post.id, dislike_user_id=self.id)
+        dislike.delete()
+        self.save()
+        post.save()
+
 
 
     def follow(self, user):
@@ -43,14 +68,11 @@ class User(AbstractUser):
 
     def serialize(self):
         return {
-            "likes":[like.post.id for like in self.user_likes.all().filter(is_dislike=False)], 
-            "dislikes": [dislike.post.id for dislike in self.user_likes.all().filter(is_dislike=True)],
             "posts":[post.id for post in self.posts.all()],
-            "followers":[username for user in self.followers], 
-            "following": [username for user in self.following], 
-            "followers_num": len(self.followers), 
             "first":self.first, 
             "last":self.last, 
+            "liked_posts": [like.post.id for like in self.user_likes.all()], 
+            "disliked_posts": [dislike.post.id for dislike in self.user_dislikes.all()], 
             "username":self.username, 
             "email":self.email, 
             "id": self.id, 
@@ -75,20 +97,32 @@ class Post(models.Model):
             "user": self.user.username, 
             "post": self.post, 
             "timestamp": self.timestamp.strftime("%b %d, %Y %-I:%M %p"), 
-            "likes": len(self.post_likes.all().filter(is_dislike=False)), 
-            "dislikes": len(self.post_likes.all().filter(is_dislike=True))
+            "likes": len(self.post_likes.all()), 
+            "dislikes": len(self.post_dislikes.all())
         }
 
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_likes")
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="post_likes")
-    is_dislike = models.BooleanField(default=False)
+    like_post_id = models.IntegerField(default=2)
+    like_user_id = models.IntegerField(default=2)
+
+
 
 
     def __str__(self):
         return f"Like on {self.post} by {self.user}"
 
+
+class Dislike(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_dislikes")
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="post_dislikes")
+    dislike_post_id = models.IntegerField(default=1)
+    dislike_user_id = models.IntegerField(default=1)
+
+    def __str__(self):
+        return f"Dislike on {self.post} by {self.user}"
 
 
 

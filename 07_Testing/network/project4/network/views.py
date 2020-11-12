@@ -121,27 +121,41 @@ def current_user(request):
     else:
         return JsonResponse(request.user.serialize(), status=200)
 
+def user_page(request, username):
+    return render(request, "network/user_page.html", {
+        "user": User.objects.get(username=username)
+    })
 
 
 @csrf_exempt 
 @login_required 
-def follow_user(request, username): 
-    user = User.objects.get(username=username)
+def like_post(request, post_id):
     if request.method == "PUT":
-        try: 
-            data = json.loads(request.body)
-            if data.get("unfollow") is not None:
-                if data["unfollow"]:
-                    request.user.unfollow(user)
-
-                else: 
-                    request.user.follow(user)
-    
-                return JsonResponse({"success": True})
+        try:
+            post = Post.objects.get(pk=post_id)
+        except Pos.DoesNotExist:
+            return JsonResponse({"message":"No such post."}, status=404)
+        
+        data = json.loads(request.body)
+        if data.get("like") is not None:
+            if data["like"]:
+                request.user.like(post)
             else: 
-                return HttpResponse(status=400)
-        except ConnectionResetError: 
-            pass
+                request.user.unlike(post)
+            return HttpResponse(status=204)
+        elif data.get("dislike") is not None: 
+            if data["dislike"]:
+                request.user.dislike(post)
+            else: 
+                request.user.undo_dislike(post)
+            return HttpResponse(status=204)
+
+
+
+
+
+def get_post(request, post_id):
+    return JsonResponse({"result": Post.objects.get(pk=post_id).serialize()}, status=200)
 
 
 
