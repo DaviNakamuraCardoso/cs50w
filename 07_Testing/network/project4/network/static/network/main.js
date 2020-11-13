@@ -25,8 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const publish = document.querySelector("#publish");
         const text = document.querySelector("#post");
         const form = document.querySelector("#new-post");
-        const footer = document.querySelector("#footer");
         const profile = document.querySelector("#profile");
+        
 
 
         publish.disabled = true;
@@ -39,34 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         activate_button(publish, text);
 
-        // Creating the buttons to switch pages 
-        const previous = document.createElement("button");
-        const next = document.createElement("button");
-
-        // Labels 
-        previous.innerHTML = "Previous Page";
-        next.innerHTML = "Next Page";
-
-
-        if (page <= 1) {
-            previous.disabled = true;
-
-        }
-        previous.onclick = () => {
-            get_page("pages", user, page - 1);
-            page--;
-        }
-        next.onclick = () => {
-            get_page("pages", user, page + 1);
-            page++;
-            previous.disabled = false;
-        }
-
-
-        footer.append(previous);
-        footer.append(next);
-
-
+        
 
 
         }
@@ -94,21 +67,51 @@ function get_user_page(current_user, username) {
         const title = document.createElement("h1");
         const h2 = document.createElement("h2");
         const followers = document.createElement("h3");
+        const follow = document.createElement("button");
 
         // Adding the information in the elements 
         title.innerHTML = `${user.first} ${user.last}`;
         h2.innerHTML = user.username;
         followers.innerHTML = user.followers_num;
 
+
+        const current_username = current_user.username;
+        let followers_num = user.followers.length;
+        if (user.followers.some(follower => follower == current_username)) {
+            follow.innerHTML = `Unfollow: ${followers_num}`;
+            follow.style.color = "blue";
+            follow.onclick = () => {
+                follow_user(user, follow, true);
+            }
+        }
+        else {
+            follow.style.color = "black";
+            follow.innerHTML = `Follow: ${followers_num}`;
+            follow.onclick = () => {
+                follow_user(user, follow, false);
+            }
+        }
+
         // Appending to the main div
         user_page.append(title);
         user_page.append(h2);
+
+        if (current_user.username === username) {
+        }
+        else {
+            
+            user_page.append(follow);
+        }
+        
+
 
         //
         
         show_div(user_page);
         
+        
         get_page(`user_posts/${username}`, current_user, 1);
+        
         
         
 
@@ -261,6 +264,32 @@ function get_page(path, current_user, page) {
 
             });
         });
+        
+        // Creating the buttons to switch pages 
+        const previous = document.createElement("button");
+        const next = document.createElement("button");
+
+        // Labels 
+        previous.innerHTML = "Previous Page";
+        next.innerHTML = "Next Page";
+
+
+        if (page <= 1) {
+            previous.disabled = true;
+
+        }
+        previous.onclick = () => {
+            get_page(path, current_user, page - 1);
+        }
+        next.onclick = () => {
+            get_page(path, current_user, page + 1);
+            previous.disabled = false;
+        }
+
+        footer.innerHTML = "";
+        footer.append(previous);
+        footer.append(next);
+
 
 
     
@@ -268,16 +297,35 @@ function get_page(path, current_user, page) {
 
 
 
-function follow_user(user, button) {
+function follow_user(user, button, unfollow) {
     fetch(`/follow/${user.username}`, {
         method: "PUT", 
         body: JSON.stringify({
-            unfollow: false
+            unfollow:  unfollow 
 
             
         })
     })
-    button.style.color = "blue";
+    .then(() => {
+        fetch(`/users/${user.username}`)
+        .then(response => response.json())
+        .then(result => {
+            if (unfollow) {
+                button.style.color = "black"; 
+                button.innerHTML = `Follow ${result.user.followers.length}`;
+                button.onclick = () => {
+                    follow_user(result.user, button, false);
+                }
+            }
+            else {
+                button.style.color = "blue"; 
+                button.innerHTML = `Unfollow: ${result.user.followers.length}`;
+                button.onclick = () => {
+                    follow_user(result.user, button, true);
+                }
+            }
+        });
+    })
 }
 
 

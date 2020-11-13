@@ -109,10 +109,10 @@ def new_post(request):
 def get_user(request, username):
     try:
         user = User.objects.get(username=username)
-    except: 
+        return JsonResponse({"user":user.serialize()}, status=200, safe=False)
+    except User.DoesNotExist: 
         return HttpResponse(status=404)
 
-    return JsonResponse(user.serialize(), status=200)
 
 
 def current_user(request):
@@ -121,8 +121,6 @@ def current_user(request):
     else:
         return JsonResponse(request.user.serialize(), status=200)
 
-def user_page(request, username):
-    return JsonResponse({"user": User.objects.get(username=username).serialize()}, status=200, safe=False)
 
 
 def user_posts(request, username, page):
@@ -162,6 +160,26 @@ def like_post(request, post_id):
 
 def get_post(request, post_id):
     return JsonResponse({"result": Post.objects.get(pk=post_id).serialize()}, status=200)
+
+
+
+@csrf_exempt 
+@login_required
+def follow_user(request, username):
+    user = User.objects.get(username=username)
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        if data.get("unfollow") is not None: 
+            if data["unfollow"]:
+                request.user.unfollow(user)                
+            else:
+                request.user.follow(user)
+            return JsonResponse({"message": "Success"}, status=204)
+        else:
+            return JsonResponse({"message": "Missing unfollow argument!"}, status=400)
+    else:
+        return JsonResponse({"message": "Method must be PUT"})
+    
 
 
 

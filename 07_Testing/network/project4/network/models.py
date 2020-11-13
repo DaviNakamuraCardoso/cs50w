@@ -10,6 +10,22 @@ class User(AbstractUser):
         return f"{self.first} {self.last} ({self.username})"
 
 
+    def follow(self, user):
+        f = Follow(follower=self, followed=user, followerId=self.id, followedId=user.id)
+        f.save()
+        self.save()
+        user.save()
+
+
+
+    def unfollow(self, user):
+        f = self.following.get(followedId=user.id)
+        f.delete()
+        self.save()
+        user.save()
+        
+
+
     def like(self, post):
         try: 
             dislike = Dislike.objects.get(dislike_post_id=post.id, dislike_user_id=self.id) 
@@ -50,21 +66,6 @@ class User(AbstractUser):
 
 
 
-    def follow(self, user):
-        if self.username != user.username:
-            self.following.add(user)
-            user.followers.add(self)
-            self.save()
-            user.save()
-    
-
-    def unfollow(self, user):
-        if self.username != user.username:
-            self.following.all().get(username=user.username).delete()
-            user.followers.all().get(username=self.username).delete()
-            self.save()
-            user.save()
-
 
     def serialize(self):
         return {
@@ -73,9 +74,11 @@ class User(AbstractUser):
             "last":self.last, 
             "liked_posts": [like.post.id for like in self.user_likes.all()], 
             "disliked_posts": [dislike.post.id for dislike in self.user_dislikes.all()], 
+            "followers": [follow.follower.username for follow in self.followers.all()], 
+            "following": [follow.followed.username for follow in self.following.all()], 
             "username":self.username, 
             "email":self.email, 
-            "id": self.id, 
+            "id": self.id,
             "message": "Logged."
 
         }
@@ -125,6 +128,15 @@ class Dislike(models.Model):
         return f"Dislike on {self.post} by {self.user}"
 
 
+class Follow(models.Model):
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="following")
+    followerId = models.IntegerField()
 
+    followed = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followers")
+    followedId = models.IntegerField()
+
+    def __str__(self):
+        return f"Follow {self.id}: {self.follower.username} follows {self.followed.username}"
+     
 
 
