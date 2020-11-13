@@ -23,6 +23,15 @@ def get_page(request, page):
 
 
 
+def following(request, page): 
+    posts = []
+    for follow in request.user.following.all():
+        posts += follow.followed.posts.all().order_by("-id")
+    s = sorted(posts, key= lambda i: i.id, reverse=True)
+    selected = s[(page-1)*10:page*10]
+    return JsonResponse([post.serialize() for post in selected], safe=False)
+
+
     
 
 
@@ -181,6 +190,31 @@ def follow_user(request, username):
         return JsonResponse({"message": "Method must be PUT"})
     
 
+
+
+@csrf_exempt 
+@login_required 
+def edit(request, post_id):
+    try: 
+        post = Post.objects.get(pk=post_id)
+
+    # Checking the existence of the post
+    except Post.DoesNotExist:
+        return HttpResponse(status=404)
+
+    # Checking if the user is the author of the post
+    if request.user.username != post.user.username: 
+        return HttpResponse(status=403)
+    else: 
+        # Checking the method
+        if request.method == "POST":
+            data = json.loads(request.body)
+            updated_post = data.get("new_post", "") 
+            post.post = updated_post
+            post.save()
+            return JsonResponse({"updated": updated_post}, status=201)
+        else:
+            return JsonResponse({"message": "Method must be POST"}, status=400)
 
 
 
