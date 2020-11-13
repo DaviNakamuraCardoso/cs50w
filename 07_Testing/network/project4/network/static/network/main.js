@@ -26,6 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const text = document.querySelector("#post");
         const form = document.querySelector("#new-post");
         const profile = document.querySelector("#profile");
+        const following = document.querySelector("#following");
+        const user_page = document.querySelector("#user_page");
+
+
         
 
 
@@ -38,6 +42,11 @@ document.addEventListener("DOMContentLoaded", () => {
             get_user_page(user, user.username);
         });
         activate_button(publish, text);
+
+        following.addEventListener("click", () => {
+            remove_div(user_page);
+            get_page("following", user, page);
+        });
 
         
 
@@ -113,7 +122,6 @@ function get_user_page(current_user, username) {
         get_page(`user_posts/${username}`, current_user, 1);
         
         
-        
 
         
 
@@ -174,6 +182,7 @@ function get_page(path, current_user, page) {
         fetch(`/${path}/${page}`)
         .then(response => response.json())
         .then(posts => {
+            console.log(posts);
             posts.forEach(post => {
 
 
@@ -184,6 +193,11 @@ function get_page(path, current_user, page) {
                 const timestamp = document.createElement('p');
                 const like = document.createElement('button');
                 const dislike = document.createElement('button');
+                const edit = document.createElement("button");
+                const form = document.createElement("form");
+                const submit = document.createElement("input");
+                const textarea = document.createElement("textarea");
+                const edit_div = document.createElement("div");
 
                 // Setting the classes 
                 div.className = `post-div`;
@@ -192,6 +206,11 @@ function get_page(path, current_user, page) {
                 timestamp.className = 'post-timestamp';
                 like.className = 'post-like';
                 dislike.className = 'post-dislike';
+            
+                
+                // Creating the form for editing
+                submit.type = "submit";
+
 
 
                 // Filling the elements with the informations 
@@ -200,18 +219,40 @@ function get_page(path, current_user, page) {
                 timestamp.innerHTML = post.timestamp;
                 like.innerHTML = `Like: ${post.likes}`;
                 dislike.innerHTML = `Dislike: ${post.dislikes}`; 
-                
+                edit.innerHTML = 'Edit';
+                submit.innerHTML = "Save";
                 
                 // Event listeners 
                 username.addEventListener("click", () => {
                     get_user_page(current_user, post.user);
                 });
 
+                form.onsubmit = () => {
+                    edit_post(post, textarea, edit, body, form);
+                    return false;
+                }
+
+                edit.onclick = () => {
+                    
+                    
+                    textarea.value = body.innerHTML;
+                    body.style.display = "none";
+                    form.style.display = "block";
+                    edit_div.append(form);
+                    edit.disabled = true;
+
+                }
+
+
 
                 // Adding the subelements to the main div 
+                edit_div.append(body);
                 div.append(username);
-                div.append(body);
+                div.append(edit_div);
                 div.append(timestamp);
+
+                form.append(textarea);
+                form.append(submit);
                 
 
 
@@ -219,6 +260,7 @@ function get_page(path, current_user, page) {
 
                 if (post.user == current_user.username) {
                     div.style.border = "2px solid blue";
+                    div.append(edit);
 
 
                 }       
@@ -481,4 +523,22 @@ function activate_button(button, form) {
     }
 }
 
+function edit_post(post, textarea, edit, body, form) {
+    fetch(`edit/${post.id}`, {
+        method: "POST", 
+        body: JSON.stringify({
+            new_post: textarea.value
+        })
+    })
+    .then(response => response.json())
+    .then(result => {
+        edit.disabled = false;
+        body.innerHTML = result.updated; 
+        body.style.display  = 'block';
+        form.style.display = 'none';
 
+        
+    });
+    
+
+}
