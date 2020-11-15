@@ -2,52 +2,94 @@
 
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="pt">
     <head>
+        <meta charset="UTF-8">
+ 
+        <!---- Title ---->
         <title>{% block title %}{% endblock %}</title>
-        <link rel="stylesheet" type="text/css" href="{% static 'style/stylesheet.css' %}">
-        <link rel="apple-touch-icon" sizes="57x57" href="{% static 'encyclopedia/icons/apple-icon-57x57.png'%}">
-        <link rel="apple-touch-icon" sizes="60x60" href="{% static 'encyclopedia/icons/apple-icon-60x60.png'%}">
-        <link rel="apple-touch-icon" sizes="72x72" href="{% static 'encyclopedia/icons/apple-icon-72x72.png'%}">
-        <link rel="apple-touch-icon" sizes="76x76" href="{% static 'encyclopedia/icons/apple-icon-76x76.png'%}">
-        <link rel="apple-touch-icon" sizes="114x114" href="{% static 'encyclopedia/icons/apple-icon-114x114.png' %}">
-        <link rel="apple-touch-icon" sizes="120x120" href="{% static 'encyclopedia/icons/apple-icon-120x120.png' %}">
-        <link rel="apple-touch-icon" sizes="144x144" href="{% static 'encyclopedia/icons/apple-icon-144x144.png' %}">
-        <link rel="apple-touch-icon" sizes="152x152" href="{% static 'encyclopedia/icons/apple-icon-152x152.png' %}">
-        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'encyclopedia/icons/apple-icon-180x180.png' %}">
+
+        <!---- Style --->
+        <link rel="stylesheet" type="text/css" href="{% static 'encyclopedia/styles.css' %}">
+        <script src="https://kit.fontawesome.com/f0d3ee0f06.js" crossorigin="anonymous"></script>
+
+        <!---- Icon ---->
         <link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
         <link rel="icon" type="image/png" sizes="32x32" href="{% static 'encyclopedia/icons/favicon-32x32.png' %}">
         <link rel="icon" type="image/png" sizes="96x96" href="{% static 'encyclopedia/icons/favicon-96x96.png' %}">
         <link rel="icon" type="image/png" sizes="16x16" href="{% static 'encyclopedia/icons/favicon-16x16.png' %}">
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     </head>
+
     <body>
-        <div class="sidebar">
-            <div id="sidebar_title">
-                <h1>Wiki</h1>
-            </div>
-            <form action="{% url 'search' %}">
+        <!---- Navbar ---->
+        <div class="search-box">
+            <form method="POST" action="{% url 'search' %}">
                 {% csrf_token %}
-                <input id="search" type="text" name="q" placeholder="Search Encyclopedia">
+                <input class="search-text" type="text" name="q" placeholder="Search Encyclopedia">
+                <input class="search-btn" type="submit" value="">
             </form>
-            <a href="{% url 'index' %}">
-                <div class="sidebar_element">
-                    Home
-                </div>
-            </a>
-            <a href="{% url 'new' %}">
-                <div class="sidebar_element">
-                    Create New Page
-                </div>
-            </a>
-            <a href="{% url 'random' %}">
-                <div class="sidebar_element">
-                    Random Page
-                </div>
-            </a>
+        </div>
+
+
+        <nav class="navbar">
+
+            <!-- Title -->
+            <li class="logo">
+                <a class="logo-link" href="{% url 'index' %}">
+                    <span class="logo-text">
+                        Wiki
+                    </span>
+                    <i class="fas fa-angle-double-right"></i>
+                </a>
+            </li>
+
+                               
+            <!--- Links --->
+            <ul class="navbar-nav">
+
+                <!-- Searchbox -->
+                    
+
+                <!-- Home -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'index' %}">
+                        <i class="fas fa-home"></i>
+                        <span class="link-text">
+                            Home
+                        </span>
+                    </a>
+                </li>
+
+                <!-- New Article -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'new' %}">
+                        <i class="fas fa-plus-square"></i> 
+                        <span class="link-text">
+                           New Page
+                        </span>
+                    </a>
+                </li>
+
+                <!-- Random Article -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'random' %}">
+                        <i class="fas fa-random"></i>
+                        <span class="link-text">
+                            Random
+                        </span>
+                    </a>
+                </li>
+
+
+
+
+            </ul>
             {% block nav %}
             {% endblock %}
-        </div>
+        </nav>
+
+        <!---- Article ---->
         <div class="main">
             {% block body %}
             {% endblock %}

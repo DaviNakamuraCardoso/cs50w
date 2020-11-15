@@ -8,9 +8,11 @@
 {% block body %}
     <h1>All Pages</h1>
 
-    <ul>
+    <ul id="entries-list">
         {% for entry in entries %}
-            <a href="{% url 'definitions' entry %}"> <li>{{ entry }}</li> </a>
+            
+                <a href="{% url 'definitions' entry %}"><li class="entry-item"> {{ entry }}</li> </a>
+            
 
         {% endfor %}
     </ul>
