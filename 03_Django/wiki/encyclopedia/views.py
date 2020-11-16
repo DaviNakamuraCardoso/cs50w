@@ -39,7 +39,7 @@ def error(request, not_found):
 
 
 def search(request):
-    searched_word = request.GET['q']
+    searched_word = request.POST['q']
     entries = util.list_entries()
     match_list = search_engine(search=searched_word, list=entries)
     if searched_word in entries:
@@ -52,40 +52,50 @@ def search(request):
 
 
 def new(request):
+
     if request.method == 'POST':
-        form = NewArticle(request.POST)
-        if form.is_valid():
-            title = form.cleaned_data["title"]
-            article = f'# {title}\n {form.cleaned_data["article"]}'
+        # Getting the data 
+        title = request.POST["title"]
+        body = request.POST["body"]
+
+        # Verifying the existence of both the title and the body
+        if title != "" and body != "": 
+
+            # Building the article 
+            article = f'# {title}\n {body}'
+
+            # Checking for articles with the same title
             if str(title) in util.list_entries():
                 messages.warning(request, f'File {title} already exists.')
                 return render(request, "encyclopedia/new.html", {
-                "form": form,
                 "file": title
                 })
+
+            # In case there is no equal article, save the new one 
             else:
 
-                util.save_entry(form.cleaned_data["title"], article)
+                util.save_entry(title, article)
                 return HttpResponseRedirect(reverse("index"))
+
+        # If one of the fields is null, return an error message
         else:
             return render(request, "encyclopedia/new.html", {
-                "form": form
+                "messages": ["Fill all the fields to publish the article!"]
             })
 
 
-    return render(request, "encyclopedia/new.html", {
-        "form": NewArticle()
-    })
+    return render(request, "encyclopedia/new.html")
 
 
 def edit(request, article):
     if request.method == 'POST':
-        new_article = request.POST.get('new_article')
+        new_body = request.POST.get('new_article')
+        new_article = f"# {article}\n {new_body}"
         util.save_entry(article, new_article)
         return HttpResponseRedirect(reverse('definitions', args=(article, )))
     return render(request, "encyclopedia/edit.html", {
         "title": article,
-        "body": util.get_entry(article)
+        "body": util.get_entry(article).strip("# " + article)
     })
 
 
@@ -106,7 +116,7 @@ def md_parser(page):
 
 def search_engine(search, list):
     matches = []
-    re_str = r"(.*)" + search + r"(.*)"
+    re_str = r"(.*)" + search.strip(" ") + r"(.*)"
     search_re = re.compile(re_str, re.IGNORECASE)
     for word in list:
         if mo := search_re.search(word):
