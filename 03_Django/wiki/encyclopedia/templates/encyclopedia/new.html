@@ -1,24 +1,31 @@
 {% extends "encyclopedia/layout.html" %}
 {% block title %}
-New Article
+New Article 
 {% endblock %}
 
 
+
 {% block body %}
-<form action="{% url 'new' %}" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Publish" class="submit_button">
+
+<h1>New Article</h1>
+
+<!-- Displaying the messages -->
 {% if messages %}
-    <div class="alert alert-danger">
-        <ul class="messages">
+    <ul class="messages">
         {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
-            {{ message }} Do you want to <a href="{% url 'edit' file %}">edit?</a>
-            </li>
+        <li>{{ message }}</li>
         {% endfor %}
     </ul>
 {% endif %}
-</div>
+
+
+<form action="{% url 'new' %}" method="post" id="new-form">
+    {% csrf_token %}
+    <input type="text" class="new-article" id="new-title" name="title" placeholder="Title">
+    <textarea class="new-article" id="new-body" name="body" placeholder="Body"></textarea>
+    <input type="submit" value="Publish" class="submit-btn">
+
 </form>
+
+
 {% endblock %}
