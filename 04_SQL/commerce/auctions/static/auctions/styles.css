@@ -1,9 +1,120 @@
+
+:root {
+    --text-primary:  #EB857F;
+    --text-secondary: #FFA8A3;
+    --bgn-primary: #1e1e1e;
+    --bgn-secondary:#2e2e2e; 
+
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    padding: 10px;
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
 }
 
 
-img {
-    width: 10%;
-    height: auto;
+.navbar {
+    display: flex;
+    top: 0;
+    height: 10vh;
+    background: var(--bgn-primary);
 }
+
+
+
+.navbar-nav {
+    list-style: none;
+    width: 70%;
+    height: 100%;
+    justify-content: space-around; 
+    align-items: center;
+    margin-left: auto;
+    display: flex;
+
+}
+
+
+.nav-item {
+    width: 100%;
+    text-align: center;
+}
+
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+
+
+
+}
+
+
+
+@media screen and (max-width: 600px) {
+    .line {
+        width: 30px;
+        height: 3px; 
+        background: white;
+        margin: 5px; 
+    }
+
+    .navbar {
+        position: relative;
+
+    }
+
+    .hamburger {
+        position: fixed;
+        cursor: pointer;
+        top: 5vh;
+        transform: translate(-5%, -50%);
+        right: 5%;
+        background: #1e1e1e;
+        z-index: 3;
+        width: 50px;
+        height: 50px;
+        padding: 10px 0px 10px 5px;
+        align-items: center;
+        text-align: center;
+        border-radius: 200px;
+    }
+    .navbar-nav {
+        position: fixed;
+        background: #1e1e1e;
+        height: 100vh;
+        width: 100%;
+        text-align: center;
+        flex-direction: column;
+        clip-path: circle(50px at 90% -10%);
+        -webkit-clip-path:circle(50px at 90% -10%);
+        transition: all 1s ease-out;
+        pointer-events: none;
+        z-index: 2;
+
+    }
+    .navbar-nav.open {
+        clip-path: circle(1000px at 90% -10%);
+        -webkit-clip-path:circle(1000px at 90% -10%);
+        pointer-events: all;
+ 
+
+    }
+
+    .logo {
+        display: none;
+
+    }
+    .info {
+        display:none;
+    }
+}
+
+
+
