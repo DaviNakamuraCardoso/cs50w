@@ -89,9 +89,12 @@ def register(request):
 
 def user_page(request, username):
     user = User.objects.get(username=username)
+    if username == "admin":
+        return HttpResponseRedirect(reverse("admin"))
+
     return render(request, "auctions/user_page.html", {
         "page_user":user,
-        "user_listings": user.listings.all(),
+        "listings": user.listings.all(),
         "bids": user.user_bids.all(),
         "watchlist": user.watchlist.all()
 
@@ -99,8 +102,10 @@ def user_page(request, username):
 
 
 def search_category(request, category):
+    if category not in CATEGORIES: 
+        return HttpResponseRedirect(reverse('index'))
     return render(request, "auctions/category.html", {
-        "results": Listing.objects.filter(category=category).order_by('-id'),
+        "listings": Listing.objects.filter(category=category).order_by('-id'),
         "category": category
     })
 
@@ -133,26 +138,35 @@ def new_listing(request):
         "categories": CATEGORIES
     })
 
-@login_required
 def listing_view(request, id):
     message = None
     listing = Listing.objects.get(id=id)
-    user_bid = request.user.user_bids.filter(listing=listing)
-    relations = {
+    if request.user.is_authenticated: 
+
+        user_bid = request.user.user_bids.filter(listing=listing)
+        relations = {
         "close_listing": request.user.close_listing,
         "add_watchlist": request.user.add_listing,
         "remove_watchlist": request.user.remove_listing,
         "add_bid": listing.add_bid,
         "updated_bid": listing.update_bid,
         "new_comment": listing.add_comment
+        
 
 
-    }
+        }
+    else: 
+        user_bid = []
+
+    
     if len(user_bid) < 1:
         user_bid = None
 
 
     if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse("login"))
+        
         for value in relations.keys():
             interact(request=request, listing=listing, value=value, function=relations[value], return_message="Unable to do.", id=id)
 
@@ -164,7 +178,8 @@ def listing_view(request, id):
         "user_bid": user_bid,
         "non_watchers": User.objects.exclude(watchlist=listing).all(),
         "comments": listing.listing_comments.all().order_by('-id'),
-        "message": message
+        "message": message, 
+        "listings": Listing.objects.exclude(pk=listing.id).filter(category=listing.category)
     })
 
 
@@ -191,7 +206,7 @@ def watchlist(request, username):
     user = User.objects.get(username=username)
     return render(request, "auctions/watchlist.html", {
         "user": user,
-        "watchlist": user.watchlist.all().order_by('-id')
+        "listings": user.watchlist.all().order_by('-id'), 
 
     })
 
@@ -202,7 +217,8 @@ def bids(request, username):
     user = User.objects.get(username=username)
     return render(request, "auctions/bids.html", {
     "user": user,
-    "bids": user.user_bids.all()
+    "bids": user.user_bids.all(), 
+    "listings": [bid.listing for bid in user.user_bids.all()]
     })
 
 
