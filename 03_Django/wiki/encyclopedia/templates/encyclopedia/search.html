@@ -9,11 +9,12 @@ Search
 
 {% block body %}
 <h1>Search Results for "{{ search }}"</h1>
-<ul>
-    {% for result in results %}
-        <a href="{% url 'definitions' result %}"><li>{{ result }}</li></a>
-    {% empty %}
-        <li>No articles found.</li>
-    {% endfor %}
+<ul id="entries-list">
+        {% for entry in results %}
+            
+                <a href="{% url 'definitions' entry %}"><li class="entry-item"> {{ entry }}</li> </a>
+            
+
+        {% endfor %}
 </ul>
 {% endblock %}
