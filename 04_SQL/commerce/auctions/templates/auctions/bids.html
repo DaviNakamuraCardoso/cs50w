@@ -3,6 +3,12 @@
 
 {% block body %}
 
-<h2>My bids</h2>
+
+{% if user.username ==  request.user.username %}
+<h1 id="title">My bids</h1>
+{% else %}
+<h1 id="title">{{ user.username }}'s bids</h1>
+{% endif %}
+<hr>
     
 {% endblock %}

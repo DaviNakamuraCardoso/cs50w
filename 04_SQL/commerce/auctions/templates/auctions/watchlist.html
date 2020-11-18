@@ -1,10 +1,13 @@
 {% extends "auctions/layout.html" %}
+{% load static %}
 
 {% block body %}
 {% if user.id == request.user.id %}
-<h1>My Watchlist</h1>
+<h1 id="title">My Watchlist</h1>
 {% else %}
-<h1>{{ user.first_name }}'s watchlist</h1>
+<h1 id="title">{{ user.first_name }}'s watchlist</h1>
+
 {% endif %}
+<hr>
 
 {% endblock %}
