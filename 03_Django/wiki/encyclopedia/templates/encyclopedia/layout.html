@@ -27,7 +27,7 @@
             <form method="POST" action="{% url 'search' %}">
                 {% csrf_token %}
                 <input class="search-text" type="text" name="q" placeholder="Search Encyclopedia">
-                <input class="search-btn" type="submit" value="">
+                <span class="search-btn"><i class="fas fa-search"></i></span>
             </form>
         </div>
 
