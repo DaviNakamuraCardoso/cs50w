@@ -2,39 +2,7 @@
 
 
 {% block body %}
-<h1>{{ category }}</h1>
-<ul>
-    {% for result in results %}
-        {% if not result.is_closed %}
-            <li>
-                <ul>
-                    <li>
-                        <a href="{% url 'listing' result.id %}">
-                            {{ result.title }}
+<h1 id="title">{{ category }}</h1>
+<hr>
 
-                        </a>
-                    </li>
-                    <li>
-                        Listing by: {{ result.user.username }}
-                    </li>
-                    <li>
-                        Current Bid: {{ result.current_bid }}
-                    </li>
-                    <li>
-                        Description: {{ result.description }}
-                    </li>
-                    <li>
-                        {% if result.image_url %}
-
-                        <img src="{{result.image_url}}" width=150px height=150px>
-                        {% endif %}
-                    </li>
-                </ul>
-            </li>
-        {% endif %}
-        {% empty %}
-        <li>No active listings in {{ category }}</li>
-    {% endfor %}
-
-</ul>
 {% endblock %}

@@ -1,25 +1,56 @@
 {% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'auctions/form.css' %}">
+{% endblock %}
 
 {% block body %}
+    <div class="main-form">
+        <div class="form">
+            <form action="{% url 'new' %}" method="post">
 
-    <form action="{% url 'new' %}" method="post">
-        {% csrf_token %}
-        <li>Title<input type="text" name="title"></li>
-        <li>Description<input type="text" name="description" ></li>
-        <li>Start Bid<input type="number" name="start_bid"></li>
+                <div class="name-form">
+                    {% csrf_token %}
+                        <label for="title">
+                            Name
+                        </label>
+                        <input type="text" name="title" autocomplete="off" required>
+                    
+                        <label for="description">
+                            Description
+                        </label>
+                        <input type="text" name="description" autocomplete="off" required>
+                        <label for="start_bid">
+                            Start Bid
 
-        <li>Category</li>
-        <input list="categories" name="category">
-        <datalist id="categories">
-            {% for category in categories %}
-                <option value="{{ category }}">{{ category }}</option>
-            {% endfor %}
-        </datalist>
-        <li>Image url (optional): <input type="text" name="image_url"></li>
-        <li><input type="submit"></li>
+                        </label>
+                        <input type="number" name="start_bid" autocomplete="off" required>
+                    
+                        <label for="category">
+                            Category
+                    
+                        </label>
+                        <input list="categories" name="category" autocomplete="off">
+                        <datalist id="categories">
+                            {% for category in categories %}
+                                <option value="{{ category }}">{{ category }}</option>
+                            {% endfor %}
+                        </datalist>
 
 
-    </form>
+                        <label for="image_url">
+                            Image Url
+
+                        </label>
+                        <input type="text" name="image_url">
+                        <input type="submit">
+                
+                
+                </div>
+            </form>
+        </div>
+    </div>
 
 
 {% endblock %}
