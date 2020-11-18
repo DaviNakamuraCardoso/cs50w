@@ -1,5 +1,8 @@
 {% extends "auctions/layout.html" %}
-
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'auctions/auction.css' %}">
+{% endblock %}
 {% block body %}
 
 {% if message %}
@@ -20,87 +23,94 @@
 
 
 {% endif %}
-<h1>{{ listing.title }}</h1>
-{% if listing.user.id == request.user.id %}
-        {% if not listing.is_closed %}
-        <form action="{% url 'listing' listing.id %}" method="post">
-            {% csrf_token %}
-            <input type="submit" name="close_listing" value="Close Listing">
-        </form>
-        {% endif %}
+<div class="listing-container">
+    <div class="listing-card">
+        <div class="head">
 
-
-{% else %}
-    {% if user in non_watchers %}
-        <form action="{% url 'listing' listing.id %}" method="post">
-            {% csrf_token %}
-            <input type="submit" name="add_watchlist" value="Add Watchlist">
-        </form>
-        {% else %}
-        <form action="{% url 'listing' listing.id %}" method="post">
-            {% csrf_token %}
-            <input type="submit" name="remove_watchlist" value="Remove Watchlist">
-        </form>
-    {% endif %}
-{% endif %}
-
-
-
-
-<h2>Auction by {{ listing.user.username}}</h2>
-    <ul>
-        <li>
-            Start bid: ${{ listing.starting_bid}}
-        </li>
-
-        <li>
-            Description:
-            <p>{{ listing.description }}</p>
-        </li>
-
-        <li>
-            {% if listing.category %}
-                Category: {{listing.category}}
-            {% endif %}
-        </li>
-        <li>
-
+        </div>
+        <div class="product">
             {% if listing.image_url %}
-                Image:
                 <img src="{{listing.image_url}}" width=200px height=auto>
-            {% endif %}
+            {% else %}
+                <img src="{% static 'auctions/images/default.jpg'%}">
+            {% endif %} 
 
-        </li>
+        </div>
+        <div class="text">
+            <div class="title">
+                <h3>{{ listing.title }}</h3>
+                <p>{{ listing.description }}</p>
+            </div>
 
-        <li>
-            Current Bid: ${{listing.current_bid}}
-        </li>
-        <li>
-            Current Winner: {{listing.winner}}
-        </li>
+        </div>
+        <div class="footer">
 
-
-    </ul>
-
-
-
-
-
-
-{% if request.user.username == listing.user.username %}
+            <!-- Make bids -->
+            <div class="action">
+                {% if request.user.username == listing.user.username %}
 
 
-{% elif not listing.is_closed  %}
-    {% if user_bid is None %}
-    <form action="{% url 'listing' listing.id %}" method="post">
-        {% csrf_token %}
-        <input type="number" name="add_bid" min="{{listing.current_bid}}">
-        <input type="submit" value="Make Bid">
+                {% elif not listing.is_closed  %}
+                    {% if user_bid is None %}
+                    <form action="{% url 'listing' listing.id %}" method="post">
+                        {% csrf_token %}
+                        <input class="text-box" type="number" name="add_bid" min="{{listing.current_bid}}">
+                        <input class="bid-btn" type="submit" value="Make Bid">
+                    
+                    </form>
+                    {% else %}
+                        <form action="{% url 'listing' listing.id %}" method="post">
+                            {% csrf_token %}
+                        
+                            <input class="text-box" type="number" name="updated_bid" placeholder="{{bid.bid}}" min="{{bid.bid}}">
+                            <input class="bid-btn" type="submit" value="Update Bid">
+                        
+                        </form>
 
-    </form>
-    {% endif %}
 
-{% endif %}
+
+                    {% endif %}
+
+                {% endif %}
+
+
+            </div>
+
+            <!-- Add Watchlist -->
+            <div class="cart">
+                {% if listing.user.id == request.user.id %}
+                    {% if not listing.is_closed %}
+                    <form action="{% url 'listing' listing.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" name="close_listing" value="Close Listing">
+                    </form>
+                    {% endif %} 
+            
+                {% else %}
+                    {% if user in non_watchers %}
+                        <form action="{% url 'listing' listing.id %}" method="post">
+                            {% csrf_token %}
+                            <i class="fas fa-eye"><input class="watch" type="submit" name="add_watchlist" value="Add Watchlist"></i>
+                        </form>
+                    {% else %}
+                        <form action="{% url 'listing' listing.id %}" method="post">
+                            {% csrf_token %}
+                            <i class="fas fa-eye-slash"><input class="watch" type="submit" name="remove_watchlist" value="Remove Watchlist"></i>
+                        </form>
+                    {% endif %}
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
 
 <h2>Bids:</h2>
 <ul>
@@ -113,19 +123,9 @@
             offered $
                 {{ bid.bid }}
 
-            {% if bid.user.username == request.user.username and not listing.is_closed %}
-            <form action="{% url 'listing' listing.id %}" method="post">
-                {% csrf_token %}
-
-                <input type="number" name="updated_bid" placeholder="{{bid.bid}}" min="{{bid.bid}}">
-                <input type="submit" value="Update Bid">
-
-            </form>
 
 
 
-
-            {% endif %}
         </li>
 
     {% empty %}
@@ -154,5 +154,7 @@
     {% csrf_token %}
     <input type="text" name="new_comment" placeholder="Comment here">
 </form>
+
+<h2>Related items:</h2>
 
 {% endblock %}

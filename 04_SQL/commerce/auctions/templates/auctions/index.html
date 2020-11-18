@@ -2,53 +2,25 @@
 {% load static %}
 
 {% block head %}
-    <link rel="stylesheet" href="{% static 'auctions/listings.css' %}">
 {% endblock %}
 
+
 {% block body %}
-    <h2>Active Listings</h2>
-    <h3>Search in: </h3>
-    <form action="{% url 'index' %}" method="post">
-        {% csrf_token %}
-        <input list="categories" name="selected">
-        <datalist id="categories">
-            {% for category in categories %}
-                 <option value="{{category}}"> {{ category }} </option>
-            {% endfor %}
-        </datalist>
-        <input type="submit">
-    </form>
-    <div class="main">
-    {% for listing in listings %}
-        {% if not listing.is_closed %}
-            <div class="container">
-                <div  class="card">
+    <h2 id="title">Active Listings</h2>
+    <hr>
+    <div class="search">
+        <h3 id="search-title">Search</h3>
+        <form action="{% url 'index' %}" method="post" id="search-form">
+            {% csrf_token %}
+            <input class="search-categories" list="categories" name="selected">
+            <datalist id="categories">
+                {% for category in categories %}
+                     <option value="{{category}}"> {{ category }} </option>
+                {% endfor %}
+            </datalist>
+            <input type="submit" class="btn-search">
+        </form>
+    </div>
 
-                        <div class="imgBx">
-                            {% if listing.image_url %}
-                                <img width="240px" height="240px"src="{{ listing.image_url }}">
-                        
-                            {% endif %}
-
-
-                        </div>
-                        <div class="content">
-                            <a href="{% url 'listing' listing.id %}">
-                                <h2>{{ listing.title }}</h2>
-                            </a>
-                            <p>{{ listing.description }}</p>
-                            <p>Auction by <a href="{% url 'user_page' listing.user.username %}">{{ listing.user.username }}</a></p>
-                            <p>Starting bid: ${{ listing.starting_bid }}</p>
-                            <p>Current bid: ${{ listing.current_bid }}</p>
-                        </div>
-
-                    </div>
-                </a>
-            </div>
-        {% endif %}
-        {% empty %}
-        <li>No active Listings.</li>
-
-    {% endfor %}
-   </div>
+    
 {% endblock %}

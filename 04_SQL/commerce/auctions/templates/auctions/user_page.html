@@ -1,36 +1,33 @@
 {% extends "auctions/layout.html" %}
 {% block body %}
 
-<h1>{{ page_user.first_name }} {{ page_user.last_name }}</h1>
-<h2>Username: {{ page_user.username }}</h2>
+<h1 id="title">{{ page_user.first_name }} {{ page_user.last_name }}</h1>
+<hr>
+<h2 id="subtitle">{{ page_user.username }}</h2>
+
+<div class="info">
+    <h2>Info</h2>
+    <hr class="hr2">
+    <ul class="about">
+        <li>Email: {{ page_user.email }}</li>
+
+
+    </ul>
+</div>
+<h3 class="listing-title">User listings</h3>
 {% if request.user.username == page_user.username %}
-    <a href="{% url 'new' %}">Add Auctions</a>
+    <div class='btn-container'>
+    <a href="{% url 'new' %}" class="btn-new">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <i class="fas fa-plus"></i>
+        Add Auction
+
+    </a>
+</div>
         
 {% endif %}
-
-<ul>
-    <li>Email: {{page_user.email}}</li>
-
-</ul>
-<h2>Listings:</h2>
-<ul>
-    {% for listing in user_listings %}
-        <li>
-            <a href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
-            {% if page_user.username == request.user.username %}
-            <p>Edit</p>
-            <p>Delete</p>
-            {% endif %}
-
-        </li>
-        {% empty %}
-        <li>No active Listings.</li>
-
-    {% endfor %}
-</ul>
-
-
-
-
 
 {% endblock %}

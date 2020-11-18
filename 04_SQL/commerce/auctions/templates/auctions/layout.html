@@ -5,11 +5,13 @@
     <head>
         <title>{% block title %}Auctions{% endblock %}</title>
         <link rel="stylesheet" href="{% static 'auctions/styles.css' %}">
+        <link rel="stylesheet" href="{% static 'auctions/listings.css' %}">
         <link rel="icon" type="image/png" sizes="32x32" href="{% static 'auctions/icons/favicon-32x32.png' %}">
         <link rel="icon" type="image/png" sizes="96x96" href="{% static 'auctions/icons/favicon-96x96.png' %}">
         <link rel="icon" type="image/png" sizes="16x16" href="{% static 'auctions/icons/favicon-16x16.png' %}">
         <script src="{% static 'auctions/hamburger.js' %}"></script>
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+        <script src="https://kit.fontawesome.com/f0d3ee0f06.js" crossorigin="anonymous"></script>
         {% block head %}
         {% endblock %}
 
@@ -62,7 +64,50 @@
                 {% endif %}
             </ul>
         </nav>
-        {% block body %}
-        {% endblock %}
+        <main>
+            {% block body %}
+            {% endblock %}
+    <div class="main">
+    {% for listing in listings %}
+        {% if not listing.is_closed %}
+            <div class="container">
+                <div  class="card">
+
+                        <div class="imgBx">
+                            <figure>
+                                {% if listing.image_url %}
+                                    <img width="240px" height="240px"src="{{ listing.image_url }}">
+                                {% else %}
+                                    <img width="240px" height="240px" src="{% static 'auctions/images/default.jpg' %}">
+                        
+                                {% endif %}
+                                <figcaption>{{ listing.title }}</figcaption>
+                            </figure>
+
+
+                        </div>
+                        <div class="content">
+                            <h2>{{ listing.title }}</h2>
+                            
+                            <p>{{ listing.description }}</p>
+                            <p>Auction by <a href="{% url 'user_page' listing.user.username %}">{{ listing.user.username }}</a></p>
+                            <p>Starting bid: ${{ listing.starting_bid }}</p>
+                            <p>Current bid: ${{ listing.current_bid }}</p>
+                            <a class="btn-submit" href="{% url 'listing' listing.id %}">
+                                See auction
+                            </a>
+
+                        </div>
+
+                </div>
+            </div>
+        {% endif %}
+        {% empty %}
+        <li>No active Listings.</li>
+
+    {% endfor %}
+   </div>
+
+        </main>
     </body>
 </html>
