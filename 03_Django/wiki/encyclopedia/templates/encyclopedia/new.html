@@ -10,12 +10,15 @@ New Article
 <h1>New Article</h1>
 
 <!-- Displaying the messages -->
-{% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
+{% if message %}
+
+<h3 class="danger-message"></h3>
+{% endif %}
+
+{% if file %}
+<div class="danger-message">
+    <h3>File {{ file }} already exists. Do you want to <a href="{% url 'edit' file %}">edit?</a> </h3>
+</div>
 {% endif %}
 
 

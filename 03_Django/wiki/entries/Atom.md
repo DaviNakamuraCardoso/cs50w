@@ -1,2 +1,3 @@
 # Atom
- Text editor for programming.
+ 
+Text editor for programming.

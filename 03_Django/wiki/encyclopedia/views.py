@@ -65,10 +65,9 @@ def new(request):
             article = f'# {title}\n {body}'
 
             # Checking for articles with the same title
-            if str(title) in util.list_entries():
-                messages.warning(request, f'File {title} already exists.')
+            if str(title).strip(" ") in util.list_entries():
                 return render(request, "encyclopedia/new.html", {
-                "file": title
+                "file": str(title).strip(" ")
                 })
 
             # In case there is no equal article, save the new one 
@@ -80,7 +79,7 @@ def new(request):
         # If one of the fields is null, return an error message
         else:
             return render(request, "encyclopedia/new.html", {
-                "messages": ["Fill all the fields to publish the article!"]
+                "message": "Fill all the fields to publish the article!"
             })
 
 
