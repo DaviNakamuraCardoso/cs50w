@@ -7,12 +7,13 @@
     margin: 0px;
     padding: 0px;
     outline: none;
+    
 }
 
 textarea {
     background: #f0f0f0;
-    width: 50vmax;
-    height: 50vmax;
+    width: 100vw;
+    height: 50vh;
     font-family: 'Lato', sans-serif;
     
 }
@@ -26,7 +27,10 @@ input {
     font-family: 'Lato', sans-serif;
 }
 
-
+.compose-view h3 {
+    text-align: center;
+    font-family: "Righteous", sans-serif;
+}
 
 /* Classes */
 .menu-btn {
@@ -78,16 +82,29 @@ input {
     animation-duration: 2s;
     animation-play-state: paused;
     animation-fill-mode: forwards;
-    display: block;
+    display: grid;
+    grid-template-areas: 
+    "title title btn-container"
+    "body body btn-container";
     position: relative;
+    justify-content: space-around;
+    align-items: center;
     size: 100%;
 
 }
 
+.btn-container {
+    grid-area: btn-container;
+}
+
+.mail-body {
+    grid-area: body;
+}
 
 
 .title {
     font-family: "Righteous", cursive;
+    grid-area: title;
 
 }
 
@@ -103,7 +120,7 @@ input {
     height: 20px;
     background: none;
     border: 2px solid; 
-    color: #db3434;
+    color: #1e1e1e;
     font-weight: 700;
     text-transform: uppercase;
     cursor: pointer;
@@ -152,7 +169,7 @@ input {
 
 .form-control {
     border-radius: 20px;
-    border: 1px solid gray;
+    border: 2px solid gray;
     text-align: left;
     margin-left: 10%;
     margin-top: -25px;
@@ -217,6 +234,7 @@ input {
     margin: 2vmax;
     background-color: #f0f0f0;
     border-radius: 20px;
+    padding: 20px;
 }
 
 #compose-form {
@@ -228,4 +246,6 @@ input {
 #compose-body {
     margin-left: 20px;
     margin-top: 0px;
+    width: 90vw;
+
 }

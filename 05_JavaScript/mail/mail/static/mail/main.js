@@ -6,9 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', () => compose_email());
-  document.querySelector("form").onsubmit = send_mail;
-
-
+  document.querySelector("#compose-form").onsubmit = send_mail;
+  
   // By default, load the inbox
   load_mailbox('inbox');
 });
@@ -65,6 +64,7 @@ function load_mailbox(mailbox) {
       const body = document.createElement("ul");
       const sender = document.createElement("li");
       const recipients = document.createElement("li");
+      const btn_container = document.createElement("div");
       const archive = document.createElement("button");
       const read = document.createElement("button");
       const reply = document.createElement("button");
@@ -78,27 +78,27 @@ function load_mailbox(mailbox) {
 
       // Define the classes 
       title.className = "title";
+      body.className = "mail-body"; 
+      btn_container.className = "btn-container";
       archive.className = "post-btn";
       read.className = "post-btn";
       reply.className = "post-btn";
       
-    
-
       
-
-
-
-
+    
       // Adding the smaller elements to the div 
       body.append(sender);
       body.append(recipients);
       element.append(title);
       element.append(body);
       if (mailbox != 'sent')  {
-        element.append(read);
-        element.append(archive);
-        element.append(reply);
+        btn_container.append(reply);
+        btn_container.append(read);
+        btn_container.append(archive);
+
+
       }
+      element.append(btn_container);
 
       if (email.read) {
         element.className = 'read';
@@ -209,7 +209,7 @@ function update_reads(email, button) {
 
 
 function remove_div(button) {
-  const div = button.parentElement;
+  const div = button.parentElement.parentElement;
   div.style.animationPlayState = 'running';
   button.style.animationPlayState = 'running';
   div.addEventListener('animationend', () => {
@@ -243,7 +243,6 @@ function send_mail() {
   const recipients = document.querySelector("#compose-recipients").value;
   const subject = document.querySelector("#compose-subject").value;
   const body = document.querySelector("#compose-body").value;
-
   fetch("/emails", {
     method: 'POST', 
     body: JSON.stringify({
@@ -254,10 +253,12 @@ function send_mail() {
   })
   .then(response => response.json())
   .then(result => {
-    document.querySelector("#message").innerHTML = result.message;
+    console.log(results.message);
+
     
     
   });
+
 
 }
 
