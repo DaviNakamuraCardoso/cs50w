@@ -45,7 +45,7 @@ function load_mailbox(mailbox) {
   document.querySelector("#mail-view").style.display = 'none';
 
   // Show the mailbox name
-  view.innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+  view.innerHTML = `<h3 class="title">${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
  
 
 
@@ -94,9 +94,11 @@ function load_mailbox(mailbox) {
       body.append(recipients);
       element.append(title);
       element.append(body);
-      element.append(archive);
-      element.append(read);
-      element.append(reply);
+      if (mailbox != 'sent')  {
+        element.append(read);
+        element.append(archive);
+        element.append(reply);
+      }
 
       if (email.read) {
         element.className = 'read';
@@ -144,9 +146,6 @@ function update_archive(email, button) {
       })
       .then(() => {
         remove_div(button);
-      })
-      .then(() => {
-        load_mailbox('inbox');
       });
     });
   }
@@ -212,7 +211,9 @@ function update_reads(email, button) {
 function remove_div(button) {
   const div = button.parentElement;
   div.style.animationPlayState = 'running';
+  button.style.animationPlayState = 'running';
   div.addEventListener('animationend', () => {
+    button.remove();
     div.remove();
 
   })
@@ -246,7 +247,7 @@ function send_mail() {
   fetch("/emails", {
     method: 'POST', 
     body: JSON.stringify({
-      recipients: recipients.join(','), 
+      recipients: recipients, 
       subject: subject, 
       body: body
     })
@@ -276,7 +277,7 @@ function get_mail(id) {
     mail.innerHTML = `
     <h2>Subject: ${email.subject}</h2>
     <h3>From: ${email.sender}</h3>
-    <h3>To: ${email.recipients.split(',')}</h3>
+    <h3>To: ${email.recipients}</h3>
     <h6>${email.timestamp}</h6>
 
     <p>${email.body}</p>

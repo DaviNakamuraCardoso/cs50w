@@ -6,8 +6,8 @@ from django.http import JsonResponse
 from django.shortcuts import HttpResponse, HttpResponseRedirect, render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-
 from .models import User, Email
+
 
 
 def index(request):
@@ -94,6 +94,7 @@ def mailbox(request, mailbox):
     # Return emails in reverse chronologial order
     emails = emails.order_by("-timestamp").all()
     return JsonResponse([email.serialize() for email in emails], safe=False)
+    
 
 
 @csrf_exempt

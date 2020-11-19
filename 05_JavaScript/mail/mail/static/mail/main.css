@@ -7,18 +7,23 @@
     margin: 0px;
     padding: 0px;
     outline: none;
-    border: none;
 }
 
 textarea {
-    width: 500px;
-    height: 500px;
+    background: #f0f0f0;
+    width: 50vmax;
+    height: 50vmax;
+    font-family: 'Lato', sans-serif;
     
 }
 
 ul {
     list-style: none;
 
+}
+
+input {
+    font-family: 'Lato', sans-serif;
 }
 
 
@@ -63,11 +68,19 @@ ul {
 }
 
 .read, .unread {
+    height: 100px;
     margin: 10px;
     padding: 10px;
     border: 2px solid black;
     font-family: "Lato", sans-serif;
     font-weight: 700;
+    animation-name: hide-div;
+    animation-duration: 2s;
+    animation-play-state: paused;
+    animation-fill-mode: forwards;
+    display: block;
+    position: relative;
+    size: 100%;
 
 }
 
@@ -75,6 +88,7 @@ ul {
 
 .title {
     font-family: "Righteous", cursive;
+
 }
 
 .read {
@@ -98,6 +112,10 @@ ul {
     padding-left: 10px;
     padding-right: 10px;
     margin: 5px;
+    animation-name: hide-btn;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    animation-play-state: paused;
 }
 
 .post-btn::before, .post-btn::after {
@@ -132,24 +150,56 @@ ul {
     right: 80%;
 }
 
+.form-control {
+    border-radius: 20px;
+    border: 1px solid gray;
+    text-align: left;
+    margin-left: 10%;
+    margin-top: -25px;
+    padding: 10px;
+    display: block;
+}
+
+.form-control:focus {
+    border: 2px solid #db3434;
+}
+
+.form-group {
+    padding: 10px;
+}
 
 
 
 /* Animations */ 
-@keyframes hide {
+@keyframes hide-div {
     0% {
+          
+        left: 0%;
         opacity: 1;
-        height: 100%;
+        height: 100px;
         line-height: 100%;
-        padding: 20px;
-        margin-bottom: 10px;
+        padding: 10px;
+        margin: 10px;
+        font-size: 100%;
     }
+    75% {
+        left: 50%;
+        opacity: 0;
+        height: 100px;
+        line-height: 100%;
+        padding: 10px;
+        margin: 10px;
+        font-size: 100%;
+    }
+
     100% {
+        left: 100%;
         opacity: 0;
         height: 0px;
-        line-height: 0px;
+        line-height: 0%;
         padding: 0px;
-        margin-bottom: 0px;
+        margin: 0px;
+        font-size: 0px;
     }
 }
 
@@ -167,4 +217,15 @@ ul {
     margin: 2vmax;
     background-color: #f0f0f0;
     border-radius: 20px;
+}
+
+#compose-form {
+    font-family: 'Righteous', cursive;
+
+
+}
+
+#compose-body {
+    margin-left: 20px;
+    margin-top: 0px;
 }
