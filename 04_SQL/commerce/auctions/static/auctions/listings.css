@@ -207,7 +207,7 @@ figcaption {
 /* Large screens */
 @media screen and (min-width: 601px) {
 .card:hover {
-    height: 500px;
+    height: 600px;
 
 }
 }

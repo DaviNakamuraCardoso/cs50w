@@ -38,6 +38,7 @@ body {
 
 main {
     margin-top: 10vh;
+    
 }
 
 .logo {
@@ -247,7 +248,8 @@ hr {
 
     .navbar {
         position: relative;
-
+        background: rgba(0, 0, 0, 0);
+        
     }
 
     .hamburger {
@@ -276,7 +278,7 @@ hr {
         -webkit-clip-path:circle(50px at 90% -10%);
         transition: all 1s ease-out;
         pointer-events: none;
-        z-index: 2;
+        z-index: 12;
 
     }
     .navbar-nav.open {
