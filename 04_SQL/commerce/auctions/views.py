@@ -7,7 +7,6 @@ from django.contrib.auth.decorators import login_required
 from .models import User, Listing, Bid, Comment
 
 
-
 CATEGORIES = [
     "Toys",
     "Fashion",
@@ -17,8 +16,10 @@ CATEGORIES = [
     "Home",
     "Games",
     "Music",
-    "Books"
+    "Books", 
+    "Miscellaneous"
 ]
+
 
 
 def index(request):
@@ -27,7 +28,7 @@ def index(request):
         category = request.POST['selected']
         return HttpResponseRedirect(reverse('category', args=(category, )))
     return render(request, "auctions/index.html", {
-    "listings":Listing.objects.all().order_by('-id'),
+    "listings":Listing.objects.all().filter(is_closed=False).order_by('-id'),
     "categories": CATEGORIES
     })
 
@@ -94,9 +95,9 @@ def user_page(request, username):
 
     return render(request, "auctions/user_page.html", {
         "page_user":user,
-        "listings": user.listings.all(),
-        "bids": user.user_bids.all(),
-        "watchlist": user.watchlist.all()
+        "listings": user.listings.all().order_by("-id"),
+        "bids": user.user_bids.all().order_by("-id"),
+        "watchlist": user.watchlist.all().order_by("-id")
 
     })
 
@@ -106,7 +107,8 @@ def search_category(request, category):
         return HttpResponseRedirect(reverse('index'))
     return render(request, "auctions/category.html", {
         "listings": Listing.objects.filter(category=category).order_by('-id'),
-        "category": category
+        "category": category, 
+        "categories": CATEGORIES
     })
 
 
@@ -143,18 +145,8 @@ def listing_view(request, id):
     listing = Listing.objects.get(id=id)
     if request.user.is_authenticated: 
 
-        user_bid = request.user.user_bids.filter(listing=listing)
-        relations = {
-        "close_listing": request.user.close_listing,
-        "add_watchlist": request.user.add_listing,
-        "remove_watchlist": request.user.remove_listing,
-        "add_bid": listing.add_bid,
-        "updated_bid": listing.update_bid,
-        "new_comment": listing.add_comment
+        user_bid = request.user.user_bids.filter(listing__id=listing.id)
         
-
-
-        }
     else: 
         user_bid = []
 
@@ -162,13 +154,27 @@ def listing_view(request, id):
     if len(user_bid) < 1:
         user_bid = None
 
+    relations = {
+        "close_listing": [request.user.close_listing, "Could not close the listing"],
+        "add_watchlist": [request.user.add_listing, "Could not add to watchlist"],
+        "remove_watchlist": [request.user.remove_listing, "Could not remove from watchlist"],
+        "add_bid": [listing.add_bid, "Bids must be greater than or equal the start bid and greater than the current bid"],
+        "updated_bid": [listing.update_bid, "Bids must be greater than or equal the start bid and greater than the current bid"], 
+        "new_comment": [listing.add_comment, "Unable to add comment"]
+        
+
+
+    }
 
     if request.method == 'POST':
         if not request.user.is_authenticated:
             return HttpResponseRedirect(reverse("login"))
         
         for value in relations.keys():
-            interact(request=request, listing=listing, value=value, function=relations[value], return_message="Unable to do.", id=id)
+            if not interact(request=request, listing=listing, value=value, function=relations[value][0], return_message="Unable to do.", id=id):
+                return HttpResponseRedirect(reverse("error", args=(relations[value][1], )))
+        return HttpResponseRedirect(reverse('listing', args=(listing.id, )))
+        
 
 
 
@@ -178,27 +184,28 @@ def listing_view(request, id):
         "user_bid": user_bid,
         "non_watchers": User.objects.exclude(watchlist=listing).all(),
         "comments": listing.listing_comments.all().order_by('-id'),
-        "message": message, 
-        "listings": Listing.objects.exclude(pk=listing.id).filter(category=listing.category)
+        "listings": Listing.objects.exclude(pk=listing.id).filter(category=listing.category, is_closed=False).order_by("-id")
     })
 
+
+def error(request, value):
+
+    return render(request, "auctions/error.html", {
+        "message":value
+    })
 
 @login_required
 def interact(request, listing, value, function, return_message, id):
     if value in request.POST:
         try:
-            function(request.POST[value], user=request.user)
+            return function(request.POST[value], user=request.user)
 
 
         except:
-            function(id)
+            return function(id)
 
-        return HttpResponseRedirect(reverse('listing', args=(listing.id, )))
     else:
-        pass
-
-
-
+        return True
 
 
 @login_required
@@ -211,101 +218,14 @@ def watchlist(request, username):
     })
 
 
-
 @login_required
 def bids(request, username):
     user = User.objects.get(username=username)
     return render(request, "auctions/bids.html", {
     "user": user,
     "bids": user.user_bids.all(), 
-    "listings": [bid.listing for bid in user.user_bids.all()]
+    "listings": [bid.listing for bid in user.user_bids.all().order_by("-id")]
     })
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#
