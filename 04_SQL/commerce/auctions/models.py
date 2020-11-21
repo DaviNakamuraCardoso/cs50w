@@ -42,7 +42,7 @@ class Listing(models.Model):
     starting_bid = models.IntegerField()
 
     # Optional arguments
-    category = models.CharField(max_length=64, null=True, blank=True)
+    category = models.CharField(max_length=64, default="Miscellaneous")
     image_url = models.CharField(max_length=3000, null=True, blank=True)
 
 

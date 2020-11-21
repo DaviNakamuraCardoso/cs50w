@@ -70,7 +70,6 @@
             {% endblock %}
     <div class="main">
     {% for listing in listings %}
-        {% if not listing.is_closed %}
             <div class="container">
                 <div  class="card">
 
@@ -94,6 +93,9 @@
                             <p>Auction by <a href="{% url 'user_page' listing.user.username %}">{{ listing.user.username }}</a></p>
                             <p>Starting bid: ${{ listing.starting_bid }}</p>
                             <p>Current bid: ${{ listing.current_bid }}</p>
+                            {% if request.user.is_authenticated %}
+
+                            {% endif %}
                             <a class="btn-submit" href="{% url 'listing' listing.id %}">
                                 See auction
                             </a>
@@ -102,9 +104,6 @@
 
                 </div>
             </div>
-        {% endif %}
-        {% empty %}
-        <li>No active Listings.</li>
 
     {% endfor %}
     </div>
