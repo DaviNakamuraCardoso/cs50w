@@ -2,7 +2,22 @@
 
 
 {% block body %}
+
 <h1 id="title">{{ category }}</h1>
 <hr>
+<div class="search">
+        <h3 id="search-title">Search</h3>
+        <form action="{% url 'index' %}" method="post" id="search-form">
+            {% csrf_token %}
+            <input class="search-categories" list="categories" name="selected" required>
+            <datalist id="categories">
+                {% for category in categories %}
+                     <option value="{{category}}"> {{ category }} </option>
+                {% endfor %}
+            </datalist>
+            <input type="submit" class="btn-search">
+        </form>
+    </div>
+
 
 {% endblock %}

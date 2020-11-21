@@ -9,34 +9,38 @@
 {% block body %}
 
 {% if message %}
-<div class="alert alert-danger">
+<div class="danger">
     {{ message }}
 </div>
 {% endif %}
 
-{% if listing.is_closed and request.user is not None%}
+{% if listing.is_closed and request.user.is_authenticated %}
     {% if listing.winner == request.user.username %}
-    <div class="alert alert-success">
+    <div class="winner">
         Congratulations, <em>{{ request.user.username }}</em>! You won this auction!
     </div>
     {% endif %}
-    <h1>This listing is closed.</h1>
-    <h2>Winner: {{ listing.winner }}</h2>
-
-
 
 {% endif %}
 <div class="listing-container">
     <div class="listing-card">
         <div class="head">
             <div class="start">
+
                 Start bid: ${{ listing.starting_bid }}
 
             </div>
             
+            {% if not listing.is_closed %}
             <div class="current">
                 Current bid: ${{ listing.current_bid }}
             </div>
+            {% else %}
+            <div class="closed">
+                Closed
+            </div>
+
+            {% endif %}
             
         </div>
         <h2 class="card-title">
@@ -55,6 +59,9 @@
                 <h3>Auction by <a href="{% url 'user_page' listing.user.username %}">{{ listing.user.username }}</h3></a>
                 <p>{{ listing.description }}</p>
             </div>
+            {% if listing.is_closed %}
+                <p><i class="fas fa-star"></i>&nbsp;Winner: <a href="{% url 'user_page' listing.winner %}">{{ listing.winner }}</a></p>
+            {% endif %}
 
         </div>
         <div class="footer">
@@ -69,7 +76,7 @@
                     {% if user_bid is None %}
                     <form action="{% url 'listing' listing.id %}" method="post">
                         {% csrf_token %}
-                        <input class="text-box" type="number" name="add_bid" min="{{listing.current_bid}}">
+                        <input class="text-box" type="number" name="add_bid">
                         <input class="bid-btn" type="submit" value="Make Bid">
                     
                     </form>
@@ -77,7 +84,7 @@
                         <form action="{% url 'listing' listing.id %}" method="post">
                             {% csrf_token %}
                         
-                            <input class="text-box" type="number" name="updated_bid" min="{{listing.starting_bid}}" value="{{ listing.starting_bid}}">
+                            <input class="text-box" type="number" name="updated_bid" >
                             <input class="bid-btn" type="submit" value="Update Bid">
                         
                         </form>
