@@ -126,6 +126,23 @@ body::-webkit-scrollbar-thumb, textarea::-webkit-scrollbar {
 }
 
 
+#error {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  text-align: center;
+
+}
+
+.danger-message {
+  background: #ff7070;
+}
+
+#error h1 {
+  font-size: 160;
+  margin: 0;
+  font-weight: 900;
+}
 
 
 
