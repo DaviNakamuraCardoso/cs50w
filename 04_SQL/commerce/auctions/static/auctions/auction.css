@@ -145,7 +145,7 @@ a {
     color: rgba(0, 0, 0, 0.7);
     transition: 1s;
 
-}
+} 
 
 .watch:hover {
     transition-delay: 0.5s;
@@ -199,6 +199,30 @@ input[type=submit] {
    color: #EB857F;
 }
 
+.closed {
+    border-radius: 10px;
+    background: red;
+    color: white;
+    text-transform: uppercase;
+    padding: 10px;
+    margin-right: -30px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    font-weight: 800;
+    width: 200px;
+}
+
+.text i {
+    color: gold;
+}
+
+.winner {
+    color: white;
+    background: green;
+    padding: 10px;
+
+     
+}
 .start {
     color: #aaa;
 }

@@ -114,6 +114,7 @@
 .container {
     position: relative;
     width: 40vw;
+    height: 700px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -123,16 +124,21 @@
 }
 
 figcaption {
-    background: white;
-    padding: 10px;
-    transition: 1s all ease-in-out;
+    display: none;
 }
+
+
+
+ul {
+    list-style: none;
+}
+
 
 .card {
     font-family: "Poppins", sans-serif;
     position: relative;
     max-width: 300px;
-    height: 215px;
+    height: 550px;
     background: #fff;
     margin: 30px 10px;
     padding: 20px 15px;
@@ -159,12 +165,11 @@ figcaption {
 
 .content {
     position: relative;
-    margin-top: -140px;
+    margin-top: -40px;
     padding: 10px 15px;
     text-align: center;
     color: #111;
-    visibility: hidden;
-    opacity: 0;
+
     transition: 0.3s ease-in-out;
     justify-content: space-around;
 }
@@ -206,19 +211,5 @@ figcaption {
 
 /* Large screens */
 @media screen and (min-width: 601px) {
-.card:hover {
-    height: 600px;
 
-}
-}
-.card:hover .content {
-    visibility: visible;
-    opacity: 1;
-    margin-top: -40px;
-    transition-delay: 0.3s;
-}
-
-.card:hover figcaption {
-    opacity: 0;
-    
 }
