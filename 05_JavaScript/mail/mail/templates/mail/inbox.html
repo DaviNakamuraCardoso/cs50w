@@ -1,7 +1,13 @@
 {% extends "mail/layout.html" %}
 {% load static %}
 
+
 {% block body %}
+<div id="message">
+    
+</div>
+
+
     <div id="menu">
         <h2>{{ request.user.email }}</h2>
         
@@ -23,16 +29,21 @@
 
     <div id="compose-view">
         <h3>New Email</h3>
-        <form id="compose-form">
-            <div class="form-group">
-                From: <input disabled class="form-control" value="{{ request.user.email }}">
-            </div>
-            <div class="form-group">
-                To: <input id="compose-recipients" class="form-control" placeholder="Recipients">
-            </div>
-            <div class="form-group">
-                Subject: <input class="form-control" id="compose-subject" placeholder="Subject">
-            </div>
+        <form id="compose-form" method = "post">
+            {% csrf_token %}
+                <!-- Sender -->
+                <label for="sender">From:</label>
+                <input name="sender" disabled class="form-control" value="{{ request.user.email }}">
+
+                <!-- Recipients -->
+                <label for="compose-recipients">To:</label>
+                <input name="compose-recipients" id="compose-recipients" class="form-control" placeholder="Recipients">
+
+                <!-- Subject -->
+                <label for="compose-subject">Subject:</label>
+                <input name="compose-subject" class="form-control" id="compose-subject" placeholder="Subject">
+                
+                <!-- Body -->
             <textarea class="form-control" id="compose-body" placeholder="Body"></textarea>
             <input type="submit" class="btn btn-primary" id="send_mail"/>
         </form>

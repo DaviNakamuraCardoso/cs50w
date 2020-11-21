@@ -6,7 +6,10 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', () => compose_email());
-  document.querySelector("#compose-form").onsubmit = send_mail;
+  document.querySelector("#compose-form").onsubmit = () => {
+    send_mail();
+    return false;
+  }
   
   // By default, load the inbox
   load_mailbox('inbox');
@@ -68,7 +71,6 @@ function load_mailbox(mailbox) {
       const archive = document.createElement("button");
       const read = document.createElement("button");
       const reply = document.createElement("button");
-      
 
       // Insert the texts 
       title.innerHTML = `${email.subject}`;
@@ -83,6 +85,9 @@ function load_mailbox(mailbox) {
       archive.className = "post-btn";
       read.className = "post-btn";
       reply.className = "post-btn";
+
+
+
       
       
     
@@ -243,8 +248,14 @@ function send_mail() {
   const recipients = document.querySelector("#compose-recipients").value;
   const subject = document.querySelector("#compose-subject").value;
   const body = document.querySelector("#compose-body").value;
+  const message_container = document.querySelector("#message");
+  const alert_message = document.createElement("div");
+
+  message_container.innerHTML = "";
+
+
   fetch("/emails", {
-    method: 'POST', 
+    method: "POST", 
     body: JSON.stringify({
       recipients: recipients, 
       subject: subject, 
@@ -253,12 +264,23 @@ function send_mail() {
   })
   .then(response => response.json())
   .then(result => {
-    console.log(results.message);
+    if (result.message) {
+      message_container.className = "success";
+      alert_message.innerHTML = result.message;
+      load_mailbox('inbox');
 
-    
+    }
+    else {
+      message_container.className = "danger";
+      alert_message.innerHTML = result.error;
+      
+
+    }
+    console.log(result.error);
+    message_container.append(alert_message);
     
   });
-
+  
 
 }
 
