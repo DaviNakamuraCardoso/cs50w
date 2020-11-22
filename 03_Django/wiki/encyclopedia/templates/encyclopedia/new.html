@@ -25,7 +25,9 @@ New Article
 <form action="{% url 'new' %}" method="post" id="new-form">
     {% csrf_token %}
     <input type="text" class="new-article" id="new-title" name="title" placeholder="Title">
-    <textarea class="new-article" id="new-body" name="body" placeholder="Body"></textarea>
+    <textarea class="new-article" id="new-body" name="body" placeholder="Body">
+        
+    </textarea>
     <input type="submit" value="Publish" class="submit-btn">
 
 </form>

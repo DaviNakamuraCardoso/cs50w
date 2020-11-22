@@ -10,11 +10,6 @@ import re
 import random
 
 
-class NewArticle(forms.Form):
-    title = forms.CharField(label="Title")
-    article = forms.CharField(label="Article")
-
-
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
@@ -62,7 +57,8 @@ def new(request):
         if title != "" and body != "": 
 
             # Building the article 
-            article = f'# {title}\n {body}'
+            article = f'# {title}\n{body}'
+            
 
             # Checking for articles with the same title
             if str(title).strip(" ") in util.list_entries():
@@ -79,7 +75,7 @@ def new(request):
         # If one of the fields is null, return an error message
         else:
             return render(request, "encyclopedia/new.html", {
-                "message": "Fill all the fields to publish the article!"
+                "message": "Fill all the fields to publish the article."
             })
 
 
@@ -89,7 +85,7 @@ def new(request):
 def edit(request, article):
     if request.method == 'POST':
         new_body = request.POST.get('new_article')
-        new_article = f"# {article}\n {new_body}"
+        new_article = f"# {article}\n{new_body}"
         util.save_entry(article, new_article)
         return HttpResponseRedirect(reverse('definitions', args=(article, )))
     return render(request, "encyclopedia/edit.html", {
@@ -104,9 +100,8 @@ def random_page(request):
     return HttpResponseRedirect(reverse('definitions', args=(random_article, )))
 
 
-
-
 def md_parser(page):
+        
     if md_text := util.get_entry(page):
         return markdown2.markdown(md_text)
     else:
@@ -122,26 +117,3 @@ def search_engine(search, list):
             matches.append(word)
 
     return matches
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#
