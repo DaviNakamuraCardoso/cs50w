@@ -1,6 +1,6 @@
 # Contributor Covenant Code of Conduct
 
-I've copied the [CS50 Web Academic Honesty Agreement](https://cs50.harvard.edu/x/2020/syllabus/), that determinates the rules over the use of this repository.
+The use of this repository should follow the the [CS50 Web Academic Honesty Agreement](https://cs50.harvard.edu/x/2020/syllabus/), copied below. 
 ## Academic Honesty
 
 This course’s philosophy on academic honesty is best stated as “be reasonable.” The course recognizes that interactions with classmates and others can facilitate mastery of the course’s material. However, there remains a line between enlisting the help of another and submitting the work of another. This policy characterizes both sides of that line.
