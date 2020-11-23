@@ -5,11 +5,12 @@ Error 404
 
 
 {% block body %}
+
     <div id="error">
         <h2>Page not found! </h2>
-        <h1>404</h1>
+        <h1 id="m404">404</h1>
         <p>Could not find the page <b>{{page}}</b>.</p>
-        <a href="{% url 'index' %}">Go back home</a>
+        <a class="submit-link" href="{% url 'index' %}">Go back home</a>
     </div>
     
 {% endblock %}

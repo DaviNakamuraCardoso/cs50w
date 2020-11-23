@@ -99,6 +99,7 @@ body::-webkit-scrollbar-thumb, textarea::-webkit-scrollbar {
   transition: color 0.4s linear;
 }
 
+
 .entry-item:hover {
   color: #fff;
 }
@@ -112,7 +113,7 @@ body::-webkit-scrollbar-thumb, textarea::-webkit-scrollbar {
     height: 100%;
     background: #1e1e1e;
     z-index: -1;
-    transition: transform 0.5s;
+    transition: transform 0.8s;
     transform-origin: 0 0;
     transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
 }
@@ -127,24 +128,50 @@ body::-webkit-scrollbar-thumb, textarea::-webkit-scrollbar {
 
 
 #error {
-  width: 100%;
   position: absolute;
-  top: 50%;
+  width: 100%;
+  top: 50vh;
+  transform: translateY(-50%);
   text-align: center;
 
 }
 
 .danger-message {
-  background: #ff7070;
+  background: #ff7a7a;
+  padding: 10px;
+  margin-bottom: 20px;
+  font-family: sans-serif;
+
+  width: 80vw;
+
 }
 
-#error h1 {
-  font-size: 160;
+.danger-message a {
+  text-decoration: underline;
+}
+
+#m404 {
+  font-size: 360px;
   margin: 0;
   font-weight: 900;
 }
 
+.submit-link {
+  padding: 10px;
+  border: 1px solid #1e1e1e;
+  text-transform: uppercase;
+  transition: all 1s ease-in-out;
+  text-align: center;
+  width: 100px;
 
+
+}
+
+.submit-link:hover {
+  background: #1e1e1e;
+  color: white;
+
+}
 
 
 

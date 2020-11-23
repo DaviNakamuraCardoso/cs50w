@@ -6,5 +6,5 @@
 
 {% block body %}
     {% autoescape off %}{{ body_content }}{% endautoescape %}
-    <a href="{% url 'edit' title %}" class="submit_button">Edit</a>
+    <a href="{% url 'edit' title %}" class="submit-link">Edit</a>
 {% endblock %}
