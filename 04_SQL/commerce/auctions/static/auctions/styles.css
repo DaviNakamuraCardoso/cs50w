@@ -62,9 +62,9 @@ main {
 
 .uinfo {
     margin-top: 20px;
-    margin-left: 20px;
+    margin-left: 10px;
     color: white;
-    width: 150px;
+    width: 170px;
 
 }
 
@@ -276,6 +276,9 @@ hr {
         height: 3px; 
         background: #ccc;
         margin: 5px; 
+    }
+    .uinfo {
+        display: none;
     }
 
     .navbar {

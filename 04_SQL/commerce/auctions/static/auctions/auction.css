@@ -199,6 +199,10 @@ input[type=submit] {
 }
 
 
+.close-listing {
+    background: red;
+    color: white;
+}
 form {
     margin-top: 10px;
 }

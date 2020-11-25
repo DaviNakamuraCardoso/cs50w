@@ -190,7 +190,7 @@ ul {
 
     .card {
         width: 100vw;
-        height: 90vh;
+        height: 100vh;
     }
     .card.open {
         z-index: -1;

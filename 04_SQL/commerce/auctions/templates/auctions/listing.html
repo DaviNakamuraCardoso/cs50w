@@ -106,7 +106,7 @@
                     {% if not listing.is_closed %}
                     <form action="{% url 'listing' listing.id %}" method="post">
                         {% csrf_token %}
-                        <input type="submit" name="close_listing" value="Close Listing">
+                        <input type="submit" class="close-listing" name="close_listing" value="Close Listing">
                     </form>
                     {% endif %} 
             
