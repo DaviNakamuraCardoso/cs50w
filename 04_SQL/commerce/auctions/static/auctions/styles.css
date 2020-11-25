@@ -44,7 +44,7 @@ main {
 .logo {
     color: white;
     margin-top: 2vh;
-    margin-left: 5vw;
+    margin-left: 2vw;
     text-transform: uppercase;
     font-family: "Poppins", sans-serif;
 }
@@ -60,11 +60,17 @@ main {
     z-index: 10;
 }
 
+.uinfo {
+    margin-top: 20px;
+    margin-left: 20px;
+    color: white;
+    width: 150px;
 
+}
 
 .navbar-nav {
     list-style: none;
-    width: 70%;
+    width: 80%;
     height: 100%;
     justify-content: space-around; 
     align-items: center;
@@ -143,6 +149,31 @@ main {
 
 .btn-new:hover span:nth-child(1) {
     width: 100%;
+}
+.category {
+    color: #1e1e1e;
+    text-align: center;
+    text-transform: uppercase;
+    transition: all 1s ease-in-out;
+    border: 1px solid #1e1e1e;
+    padding: 10px;
+    margin: 30px 0; 
+    margin-left: 50vw;
+    width: 80%;
+    transform: translateX(-50%);
+    
+}
+
+.category:hover {
+    transition-delay: .4s;
+    color: white;
+    background: #1e1e1e;
+
+
+}
+
+a {
+    text-decoration: none;
 }
 #title, #subtitle {
     font-family: "Poppins", sans-serif;
@@ -234,6 +265,7 @@ hr {
 
 
 }
+
 
 
 

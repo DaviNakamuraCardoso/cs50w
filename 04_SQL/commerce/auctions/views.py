@@ -41,7 +41,7 @@ def login_view(request):
         password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
 
-        # Check if authentication successful
+        # Check if authentication was successful
         if user is not None:
             login(request, user)
             return HttpResponseRedirect(reverse("index"))
@@ -112,6 +112,12 @@ def search_category(request, category):
     })
 
 
+def categories(request):
+    return render(request, "auctions/categories.html", {
+        "categories": CATEGORIES
+    })
+
+
 
 @login_required
 def new_listing(request):
@@ -141,11 +147,22 @@ def new_listing(request):
     })
 
 def listing_view(request, id):
-    message = None
+    message = "" 
     listing = Listing.objects.get(id=id)
     if request.user.is_authenticated: 
 
         user_bid = request.user.user_bids.filter(listing__id=listing.id)
+        relations = {
+        "close_listing": [request.user.close_listing, "Could not close the listing."],
+        "add_watchlist": [request.user.add_listing, "Could not add to watchlist."],
+        "remove_watchlist": [request.user.remove_listing, "Could not remove from watchlist."],
+        "add_bid": [listing.add_bid, "Bids must be greater than or equal the start bid and greater than the current bid."],
+        "updated_bid": [listing.update_bid, "Bids must be greater than the current bid."], 
+        "new_comment": [listing.add_comment, "Unable to add comment."]
+        
+
+
+    }
         
     else: 
         user_bid = []
@@ -154,17 +171,8 @@ def listing_view(request, id):
     if len(user_bid) < 1:
         user_bid = None
 
-    relations = {
-        "close_listing": [request.user.close_listing, "Could not close the listing"],
-        "add_watchlist": [request.user.add_listing, "Could not add to watchlist"],
-        "remove_watchlist": [request.user.remove_listing, "Could not remove from watchlist"],
-        "add_bid": [listing.add_bid, "Bids must be greater than or equal the start bid and greater than the current bid"],
-        "updated_bid": [listing.update_bid, "Bids must be greater than or equal the start bid and greater than the current bid"], 
-        "new_comment": [listing.add_comment, "Unable to add comment"]
-        
+    
 
-
-    }
 
     if request.method == 'POST':
         if not request.user.is_authenticated:
@@ -172,8 +180,12 @@ def listing_view(request, id):
         
         for value in relations.keys():
             if not interact(request=request, listing=listing, value=value, function=relations[value][0], return_message="Unable to do.", id=id):
-                return HttpResponseRedirect(reverse("error", args=(relations[value][1], )))
-        return HttpResponseRedirect(reverse('listing', args=(listing.id, )))
+                message = relations[value][1]
+
+
+        if message == "":
+            return HttpResponseRedirect(reverse("listing", args=(listing.id, )))
+
         
 
 
@@ -184,15 +196,10 @@ def listing_view(request, id):
         "user_bid": user_bid,
         "non_watchers": User.objects.exclude(watchlist=listing).all(),
         "comments": listing.listing_comments.all().order_by('-id'),
-        "listings": Listing.objects.exclude(pk=listing.id).filter(category=listing.category, is_closed=False).order_by("-id")
+        "listings": Listing.objects.exclude(pk=listing.id).filter(category=listing.category, is_closed=False).order_by("-id"),
+        "message": message
     })
 
-
-def error(request, value):
-
-    return render(request, "auctions/error.html", {
-        "message":value
-    })
 
 @login_required
 def interact(request, listing, value, function, return_message, id):

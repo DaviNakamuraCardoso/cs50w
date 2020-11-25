@@ -62,6 +62,7 @@ class Listing(models.Model):
 
 
     def add_bid(self, value, user):
+
         if self.check_bid(value=value, user=user):
             bid = Bid(bid=value, user=user, listing=self)
             bid.save()

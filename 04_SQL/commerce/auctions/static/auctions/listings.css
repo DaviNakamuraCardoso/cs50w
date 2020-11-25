@@ -1,8 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 :root {
-    --text-primary:  #EB857F;
-    --text-secondary: #FFA8A3;
     --bgn-primary: #1e1e1e;
     --bgn-secondary:#2e2e2e; 
 
@@ -16,6 +14,8 @@
     grid-template-columns: 1fr 1fr;
 
 }
+
+
 
 
 
@@ -70,8 +70,8 @@
 
 .btn-submit {
     display: block;
-    color: black;
     font-size: 14px;
+    color: #1e1e1e;
     position: relative;
     font-family: "Poppins", sans-serif;
     margin: 30px 0;
@@ -81,6 +81,7 @@
     overflow: hidden;
     transition: all 1s ease;
     z-index: 1;
+
     
 
 }
@@ -137,8 +138,8 @@ ul {
 .card {
     font-family: "Poppins", sans-serif;
     position: relative;
-    max-width: 300px;
-    height: 550px;
+    width: 500px;
+    height: 500px;
     background: #fff;
     margin: 30px 10px;
     padding: 20px 15px;
@@ -156,6 +157,10 @@ ul {
     height: 260px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
     border: 10px solid white;
+}
+
+.content p a {
+    color: #EB857F;
 }
 
 .imgBx img {

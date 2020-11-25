@@ -163,6 +163,14 @@ a {
 
 }
 
+#danger {
+    background: red;
+    color: white;
+    padding: 10px;
+    width: 100vw;
+    
+
+}
 
 
 .product {
@@ -190,8 +198,13 @@ input[type=submit] {
 
 }
 
+
+form {
+    margin-top: 10px;
+}
+
     
-.action .bid-btn {
+.bid-btn {
     background: #EB857F;
 
 }
