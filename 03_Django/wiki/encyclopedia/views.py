@@ -70,7 +70,7 @@ def new(request):
             else:
 
                 util.save_entry(title, article)
-                return HttpResponseRedirect(reverse("index"))
+                return HttpResponseRedirect(reverse("definitions", args=(title, )))
 
         # If one of the fields is null, return an error message
         else:

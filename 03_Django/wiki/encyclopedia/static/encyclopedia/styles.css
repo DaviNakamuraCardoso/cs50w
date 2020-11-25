@@ -15,7 +15,6 @@
 }
 a {
   text-decoration: none;
-  color: inherit;
   font-family: inherit; }
 
 form {
@@ -70,7 +69,7 @@ body::-webkit-scrollbar-thumb, textarea::-webkit-scrollbar {
   text-align: justify;
   
 }
-  .main h1 {
+  .main h1, h2, h3, h4, h5, h6 {
     font-family: "Merriweather", serif; }
   .main p {
     font-family: serif; }
@@ -94,6 +93,7 @@ body::-webkit-scrollbar-thumb, textarea::-webkit-scrollbar {
   position: relative;
   min-width: 200px;
   margin: 10px;
+  color: black;
   padding: 10px;
   cursor:pointer;
   transition: color 0.4s linear;
@@ -163,6 +163,8 @@ body::-webkit-scrollbar-thumb, textarea::-webkit-scrollbar {
   transition: all 1s ease-in-out;
   text-align: center;
   width: 100px;
+  color: black;
+  margin-bottom: 5rem;
 
 
 }
@@ -486,6 +488,7 @@ i {
   margin-bottom: 10rem;
 
 }
+
 
 .navbar:hover .logo-text {
   left: 0;
