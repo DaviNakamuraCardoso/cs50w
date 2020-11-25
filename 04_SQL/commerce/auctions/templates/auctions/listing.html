@@ -7,9 +7,8 @@
 <link rel="stylesheet" href="{% static 'auctions/auction.css' %}">
 {% endblock %}
 {% block body %}
-
 {% if message %}
-<div class="danger">
+<div id="danger">
     {{ message }}
 </div>
 {% endif %}
@@ -22,6 +21,7 @@
     {% endif %}
 
 {% endif %}
+
 <div class="listing-container">
     <div class="listing-card">
         <div class="head">
@@ -134,6 +134,7 @@
     </div>
 
 <div id="bids">
+<!-- Bids Card -->
 <h2>Bids:</h2>
 <ul class="listing-list">
     {% for bid in listing_bids %}
@@ -143,8 +144,7 @@
             <a href="{% url 'user_page' bid.user.username %}">
                 {{ bid.user.username }}
             </a>
-            offered $
-                {{ bid.bid }}
+            offered ${{ bid.bid }}
 
 
 
@@ -157,32 +157,36 @@
 </ul>
 </div>
 
+<!-- Comments card -->
 <div id="comments">
-<h2>Comments:</h2>
-<ul class="listing-list">
-{% for comment in comments %}
-<div class="user-comment">
-    <h5>{{ comment.user.username }} commented:</h5>
-
+    <h2>Comments:</h2>
     <ul class="listing-list">
-        <li>{{ comment.comment }}</li>
+        {% for comment in comments %}
+            <div class="user-comment">
+                <h5>{{ comment.user.username }} commented:</h5>
+            
+                <ul class="listing-list">
+                    <li>{{ comment.comment }}</li>
+                
+                </ul>
+            </div>
+                {% empty %}
+                <li>No comments yet!</li>
+        {% endfor %}
+
 
     </ul>
+
+    <form action="{% url 'listing' listing.id %}" method="post">
+        {% csrf_token %}
+        <textarea class="listing-input" name="new_comment" placeholder="Comment here"></textarea>
+        <input type="submit" class="bid-btn" value="Publish">
+    </form>
+    </div>
 </div>
-    {% empty %}
-    <li>No comments yet!</li>
-{% endfor %}
 
 
-</ul>
 
-<form action="{% url 'listing' listing.id %}" method="post">
-    {% csrf_token %}
-    <textarea class="listing-input" name="new_comment" placeholder="Comment here"></textarea>
-    <input type="submit" class="bid-btn">
-</form>
-</div>
-</div>
 <h2 id="subtitle">Related items</h2>
 <hr id="hr2">
 

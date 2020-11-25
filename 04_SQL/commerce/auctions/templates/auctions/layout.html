@@ -21,7 +21,7 @@
         
         <nav class="navbar">
             <h1 class="logo">Auctions</h1>
-            <div class="info">
+            <div class="uinfo">
                 {% if user.is_authenticated %}
                     Signed in as <strong>{{ user.username }}</strong>.
                 {% else %}
@@ -38,6 +38,9 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'categories' %}">Categories</a>
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
