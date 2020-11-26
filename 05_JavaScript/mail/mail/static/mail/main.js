@@ -19,6 +19,7 @@ function compose_email() {
 
 
   // Show compose view and hide other views
+  document.querySelector("#mail-view").style.display = "none";
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
@@ -228,6 +229,7 @@ function remove_div(button) {
 function reply_email(email) {
 
   // Show compose view and hide other views
+  document.querySelector("#mail-view").style.display = "none";
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
@@ -245,6 +247,7 @@ function reply_email(email) {
 
 function send_mail() {
 
+  const mail = document.querySelector("#mail-view");
   const recipients = document.querySelector("#compose-recipients").value;
   const subject = document.querySelector("#compose-subject").value;
   const body = document.querySelector("#compose-body").value;
@@ -252,6 +255,7 @@ function send_mail() {
   const alert_message = document.createElement("div");
 
   message_container.innerHTML = "";
+  mail.innerHTML = "";
 
 
   fetch("/emails", {
@@ -303,9 +307,10 @@ function get_mail(id) {
     const subject = document.createElement("h1");
     const sender = document.createElement("h2");
     const info = document.createElement("div");
-    const recipients = document.createElement("h2");
+    const recipients = document.createElement("h3");
     const timestamp = document.createElement("h3");
     const body = document.createElement("p");
+    const reply = document.createElement("button");
 
 
     // Creating icons
@@ -321,9 +326,11 @@ function get_mail(id) {
     timestamp.className = "mail";
     body.className = "mail";
     info.className = "info";
+    reply.className = "menu-btn";
+    reply.id = "reply-btn";
 
 
-    // Icons Classes 
+    // Icon Classes 
     senderIcon.className = "fas fa-user";
     recipientIcon.className = "fas fa-users";
     timestampIcon.className = "fas fa-clock";
@@ -334,13 +341,19 @@ function get_mail(id) {
     recipients.append(recipientIcon);
     timestamp.append(timestampIcon);
 
+    // Event Listeners 
+    reply.onclick = () => {
+      reply_email(email);
+      
+    }
 
     // Content 
+    reply.innerHTML = "Reply";
     subject.innerHTML = email.subject;
     body.innerHTML = email.body;
-    sender.append(email.sender);
-    recipients.append(`${email.recipients}`);
-    timestamp.append(email.timestamp);
+    sender.append(`${email.sender}`);
+    recipients.append(`to ${email.recipients}`);
+    timestamp.append(`${email.timestamp}`);
     
 
     // Adding elements to... 
@@ -354,6 +367,7 @@ function get_mail(id) {
     mail.append(sender);
     mail.append(info);
     mail.append(body);
+    mail.append(reply);
     
     
   });
