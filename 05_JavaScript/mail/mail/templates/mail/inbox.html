@@ -29,7 +29,7 @@
     </div>
 
     <div id="compose-view">
-        <h3>New Email</h3>
+        <h2>New Email</h2>
         <form id="compose-form" method = "post">
             {% csrf_token %}
                 <!-- Sender -->
@@ -46,7 +46,7 @@
                 
                 <!-- Body -->
             <textarea class="form-control" id="compose-body" placeholder="Body"></textarea>
-            <input type="submit" class="btn btn-primary" id="send_mail"/>
+            <button class="menu-btn" id="send_mail">Send</button>
         </form>
             
     </div>
