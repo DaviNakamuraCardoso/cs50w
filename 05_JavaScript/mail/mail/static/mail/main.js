@@ -285,11 +285,11 @@ function send_mail() {
 }
 
 
-
-
 function get_mail(id) {
   const inbox = document.querySelector("#emails-view");
   const mail = document.querySelector('#mail-view');
+
+  mail.innerHTML = "";
 
   inbox.style.display = 'none';
   mail.style.display = 'block';
@@ -297,14 +297,63 @@ function get_mail(id) {
   fetch(`/emails/${id}`)
   .then(response => response.json())
   .then(email => {
-    mail.innerHTML = `
-    <h2>Subject: ${email.subject}</h2>
-    <h3>From: ${email.sender}</h3>
-    <h3>To: ${email.recipients}</h3>
-    <h6>${email.timestamp}</h6>
 
-    <p>${email.body}</p>
-    `;
+
+    // Creating the basic structure 
+    const subject = document.createElement("h1");
+    const sender = document.createElement("h2");
+    const info = document.createElement("div");
+    const recipients = document.createElement("h2");
+    const timestamp = document.createElement("h3");
+    const body = document.createElement("p");
+
+
+    // Creating icons
+    const senderIcon = document.createElement("i");
+    const recipientIcon = document.createElement("i");
+    const timestampIcon = document.createElement("i");
+
+
+    // Classes     
+    subject.className = "mail";
+    sender.className = "mail";
+    recipients.className = "mail";
+    timestamp.className = "mail";
+    body.className = "mail";
+    info.className = "info";
+
+
+    // Icons Classes 
+    senderIcon.className = "fas fa-user";
+    recipientIcon.className = "fas fa-users";
+    timestampIcon.className = "fas fa-clock";
+
+
+    // Appending icons
+    sender.append(senderIcon);
+    recipients.append(recipientIcon);
+    timestamp.append(timestampIcon);
+
+
+    // Content 
+    subject.innerHTML = email.subject;
+    body.innerHTML = email.body;
+    sender.append(email.sender);
+    recipients.append(`${email.recipients}`);
+    timestamp.append(email.timestamp);
+    
+
+    // Adding elements to... 
+
+    // Info 
+    info.append(recipients);
+    info.append(timestamp);
+
+    // Mail 
+    mail.append(subject);
+    mail.append(sender);
+    mail.append(info);
+    mail.append(body);
     
     
   });

@@ -3,21 +3,22 @@
 {% block body %}
 
     
-    <h1 id="title">Login</h1>
 
     {% if message %}
         <div class="danger">{{ message }}</div>
     {% endif %}
 
-    <form action="{% url 'login' %}" method="post">
+    <form id="form-form" action="{% url 'login' %}" method="post">
+        
         {% csrf_token %}
         <div class="form-container">
-            <input autofocus class="login-form" type="email" name="email" placeholder="Email">
-            <input class="login-form" type="password" name="password" placeholder="Password">
+            <h1 id="title">Login</h1>
+            <input autofocus class="login-form" type="email" name="email" placeholder="Email" autocomplete="off">
+            <input class="login-form" type="password" name="password" placeholder="Password" autocomplete="off">
         <input class="login-form" type="submit" value="Login">
+        Don't have an account? <a href="{% url 'register' %}">Register here.</a>
 </div>
     </form>
 
-    Don't have an account? <a href="{% url 'register' %}">Register here.</a>
 
 {% endblock %}

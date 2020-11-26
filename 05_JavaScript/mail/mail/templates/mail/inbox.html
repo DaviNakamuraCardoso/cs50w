@@ -15,7 +15,8 @@
         <button class="menu-btn" id="compose">Compose</button>
         <button class="menu-btn" id="sent">Sent</button>
         <button class="menu-btn" id="archived">Archived</button>
-        <a class="btn btn-sm btn-outline-primary" href="{% url 'logout' %}">Log Out</a>
+        
+        <a href="{% url 'logout' %}"><button class="menu-btn">Log Out</button></a>
         <h1 id="message"></h1>
     </div>
 
@@ -41,7 +42,7 @@
 
                 <!-- Subject -->
                 <label for="compose-subject">Subject:</label>
-                <input name="compose-subject" class="form-control" id="compose-subject" placeholder="Subject">
+                <input maxlength="40" name="compose-subject" class="form-control" id="compose-subject" placeholder="Subject">
                 
                 <!-- Body -->
             <textarea class="form-control" id="compose-body" placeholder="Body"></textarea>

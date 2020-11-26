@@ -121,14 +121,26 @@ input {
     grid-area: btn-container;
 }
 
+#form-form {
+    align-items: space-around;
+    position: absolute;
+    top: 60vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 10px;
+} 
+
 .mail-body {
+    font-family: "Lato", sans-serif;
     grid-area: body;
 }
 
 
 .title {
-    font-family: "Righteous", cursive;
+    font-family: "Lato", sans-serif;
     grid-area: title;
+    text-decoration: bold;
 
 }
 
@@ -144,7 +156,7 @@ input {
 }
 
 .post-btn {
-    height: 20px;
+    height: 40px;
     background: none;
     border: 2px solid; 
     color: #1e1e1e;
@@ -165,9 +177,9 @@ input {
 .post-btn::before, .post-btn::after {
     content: "";
     position: absolute;
-    width: 15px;
+    width: 5px;
     height: 2px;
-    background: white;
+    background: #f0f0f0;
     transform: skewX(50deg);
     transition: 0.4s linear;
 
@@ -269,6 +281,47 @@ label {
     border: 2px solid #db3434;
 }
 
+
+.mail {
+    width: 100%;
+}
+
+#mail-view {
+    font-family: "Lato", sans-serif;
+    display: flex;
+    transform: translateX(-50%);
+    position: absolute;
+    left: 50vw;
+    justify-content: space-around;
+    align-items: center;
+    display: flex;
+    width: 100%;
+
+    
+}
+
+
+.info {
+    justify-content: space-between;
+    display: flex;
+    color: #a0a0a0;
+    width: 100%;
+    text-align: center;
+}
+#mail-view p {
+    border: 2px solid #db3434;
+    padding: 2vw;
+    border-radius: 20px;
+    max-width: 100%;
+}
+
+#mail-view h1 {
+    text-align: center;
+    font-family: "Righteous", cursive;
+
+
+}
+
 .form-group {
     padding: 10px;
 }
@@ -332,16 +385,15 @@ label {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    height: 50vh;
-    margin-top: 100px;
 
 
 
 }
 
 #title {
-    margin-top: 100px;
     text-align: center;
+    margin-bottom: 3rem;
+    margin-top: 1rem;
     font-family: "Righteous", cursive;
 }
 
