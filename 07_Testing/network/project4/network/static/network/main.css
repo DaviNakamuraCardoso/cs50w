@@ -1,5 +1,6 @@
 #post-container {
-    display: block;
+    display: flex;
+    flex-direction: column; 
 }
 
 .show-post {
@@ -16,8 +17,11 @@
     position: relative;               
     display: flex;
     flex-flow: column wrap;
+    border: 1px solid black;
 
 }
+
+
 
 
 .hide-post {

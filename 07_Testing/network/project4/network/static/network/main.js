@@ -8,14 +8,16 @@ document.addEventListener("DOMContentLoaded", () => {
     
         get_page("pages", user, page);
 
-        // Getting the publish button 
-        const text = document.querySelector("#post");
-        const user_page = document.querySelector("#user_page");
-
-
+        
         // Checking for authentication to add the login required features
+
         if (user.authenticated)
         {
+            // Getting the publish button 
+            const text = document.querySelector("#post");
+            const user_page = document.querySelector("#user_page");
+
+
             const following = document.querySelector("#following");
             const form = document.querySelector("#new-post");
             const profile = document.querySelector("#profile");
@@ -31,15 +33,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 get_page("following", user, page);
             });
 
+            form.onsubmit = post;
+
             publish.disabled = true;
             activate_button(publish, text);
             
-            // Event listeners 
-            form.onsubmit = post;
 
 
 
         }
+
                
     });
 
@@ -134,8 +137,6 @@ function post() {
     .then(result => {
         message.innerHTML = result.message;
         message.style.display = 'block';
-        publish_btn.disabled = true;
-        input.value = "";
     });
 
 

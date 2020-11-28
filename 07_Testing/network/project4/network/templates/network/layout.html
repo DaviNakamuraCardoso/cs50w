@@ -5,11 +5,13 @@
         <title>{% block title %}Social Network{% endblock %}</title>
         <link href="{% static 'network/main.css' %}" rel="stylesheet">
         <script src="{% static 'network/main.js' %}"></script>
+        <link rel="shortcut icon" href="{% static 'network/favicon.ico' %}" type="image/x-icon">
+        <link rel="icon" href="{% static 'network/favicon.ico' %}" type="image/x-icon">
     </head>
     <body>
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Network</a>
+        <nav class="navbar">
+            <a class="logo" href="#">Network</a>
           
             <div>
               <ul class="navbar-nav mr-auto">
