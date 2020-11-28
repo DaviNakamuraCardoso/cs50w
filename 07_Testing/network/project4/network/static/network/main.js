@@ -1,59 +1,46 @@
-
 // Waiting for the DOM to load 
 document.addEventListener("DOMContentLoaded", () => {
 
     fetch("/current_user")
     .then(response => response.json())
     .then(user => {
-        if (user.message === "Not logged.")
-        {
-
-
-        }
-        else {
-
         let page = 1;
     
-    
-
         get_page("pages", user, page);
 
-
-
-
         // Getting the publish button 
-        const publish = document.querySelector("#publish");
         const text = document.querySelector("#post");
-        const form = document.querySelector("#new-post");
-        const profile = document.querySelector("#profile");
-        const following = document.querySelector("#following");
         const user_page = document.querySelector("#user_page");
 
 
-        
+        // Checking for authentication to add the login required features
+        if (user.authenticated)
+        {
+            const following = document.querySelector("#following");
+            const form = document.querySelector("#new-post");
+            const profile = document.querySelector("#profile");
+            const publish = document.querySelector("#publish");
+            
+            
+            profile.addEventListener("click", () => {
+                get_user_page(user, user.username);
+            });
 
+            following.addEventListener("click", () => {
+                remove_div(user_page);
+                get_page("following", user, page);
+            });
 
-        publish.disabled = true;
+            publish.disabled = true;
+            activate_button(publish, text);
+            
+            // Event listeners 
+            form.onsubmit = post;
 
-
-        // Event listeners 
-        form.onsubmit = post;
-        profile.addEventListener("click", () => {
-            get_user_page(user, user.username);
-        });
-        activate_button(publish, text);
-
-        following.addEventListener("click", () => {
-            remove_div(user_page);
-            get_page("following", user, page);
-        });
-
-        
 
 
         }
-        
-
+               
     });
 
 
@@ -61,7 +48,8 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 
-function get_user_page(current_user, username) {
+function get_user_page(current_user, username) 
+{
 
     const user_page = document.querySelector("#user_page");
     remove_div(user_page);
@@ -83,50 +71,46 @@ function get_user_page(current_user, username) {
         h2.innerHTML = user.username;
         followers.innerHTML = user.followers_num;
 
-
+        
         const current_username = current_user.username;
         let followers_num = user.followers.length;
-        if (user.followers.some(follower => follower == current_username)) {
-            follow.innerHTML = `Unfollow: ${followers_num}`;
-            follow.style.color = "blue";
-            follow.onclick = () => {
-                follow_user(user, follow, true);
-            }
-        }
-        else {
-            follow.style.color = "black";
-            follow.innerHTML = `Follow: ${followers_num}`;
-            follow.onclick = () => {
-                follow_user(user, follow, false);
-            }
-        }
-
+         
         // Appending to the main div
         user_page.append(title);
         user_page.append(h2);
 
-        if (current_user.username === username) {
-        }
-        else {
-            
+        if (current_user.authenticated && current_user.username != username) 
+        {
+
+            if (user.followers.some(follower => follower == current_username)) 
+            {
+                follow.innerHTML = `Unfollow: ${followers_num}`;
+                follow.style.color = "blue";
+                follow.onclick = () => 
+                {
+                    follow_user(user, follow, true);
+                }
+            }
+            else 
+            {
+                follow.style.color = "black";
+                follow.innerHTML = `Follow: ${followers_num}`;
+                follow.onclick = () => {
+                    follow_user(user, follow, false);
+                }
+            }
             user_page.append(follow);
         }
-        
+        else
+        {
+            const fNum = document.createElement("p");
+            fNum.innerHTML = `Followers: ${followers_num}`;
+            user_page.append(fNum);
+        }
 
-
-        //
-        
         show_div(user_page);
-        
-        
         get_page(`user_posts/${username}`, current_user, 1);
         
-        
-
-        
-
-
-
     });
 
         
@@ -174,10 +158,6 @@ function get_page(path, current_user, page) {
             
 
     });
-
-
-
-    
 
         fetch(`/${path}/${page}`)
         .then(response => response.json())
@@ -258,49 +238,71 @@ function get_page(path, current_user, page) {
 
                 post_container.append(div);
 
-                if (post.user == current_user.username) {
-                    div.style.border = "2px solid blue";
-                    div.append(edit);
-
-
-                }       
-                else {
+                if (post.user != current_user.username && current_user.authenticated) 
+                {
                     div.append(like);
                     div.append(dislike);
 
-                }
+                }       
+                else  
+                {
+                    if (current_user.username === post.user)
+                    {
+                        div.style.border = "2px solid blue";
+                        div.append(edit);
+                    }
+                    lNum = document.createElement("p");
+                    dNum = document.createElement("p");
 
-                if (current_user.liked_posts.some(post_id => post_id == post.id)) {
-                    like.style.color = "blue";
-                    dislike.onclick = () => {
-                        dislike_post(like, dislike, post, true);
-                    }
-                    like.onclick = () => {
-                        undo_like(like, dislike, post);
-                    }
-                    
-                }
-                else if (current_user.disliked_posts.some(post_id => post_id == post.id)) {
-                    dislike.style.color = "blue";
-                    like.onclick = () => {
-                        like_post(like, dislike, post, true);
-                    }
-                    dislike.onclick = () => {
-                        undo_dislike(like, dislike, post);
-                    }
+                    lNum.innerHTML = `Likes: ${post.likes}`;
+                    dNum.innerHTML = `Dislikes: ${post.dislikes}`;
 
-                }
-                else {
-                    like.onclick = () => {
-                        
-                        like_post(like, dislike, post, false);
-                    }
-                    dislike.onclick = () => {
-                        dislike_post(like, dislike, post, false);
-                    }
+                    div.append(lNum);
+                    div.append(dNum);
+
                 }
 
 
+                if (current_user.authenticated)
+                {
+
+                    if (current_user.liked_posts.some(post_id => post_id == post.id)) 
+                    {
+                        like.style.color = "blue";
+                        dislike.onclick = () => {
+                            dislike_post(like, dislike, post, true);
+                        }
+                        like.onclick = () => {
+                            undo_like(like, dislike, post);
+                        }
+
+                    }
+                    else if (current_user.disliked_posts.some(post_id => post_id == post.id)) 
+                    {
+                        dislike.style.color = "blue";
+                        like.onclick = () => {
+                            like_post(like, dislike, post, true);
+                        }
+                        dislike.onclick = () => {
+                            undo_dislike(like, dislike, post);
+                        }
+
+                    }
+                    else 
+                    {
+                        like.onclick = () => {
+
+                            like_post(like, dislike, post, false);
+                        }
+                        dislike.onclick = () => {
+                            dislike_post(like, dislike, post, false);
+                        }
+                    }   
+
+                }
+                
+
+                
 
 
 
@@ -316,10 +318,11 @@ function get_page(path, current_user, page) {
         next.innerHTML = "Next Page";
 
 
-        if (page <= 1) {
+        if (page <= 1) 
+        {
             previous.disabled = true;
-
         }
+
         previous.onclick = () => {
             get_page(path, current_user, page - 1);
         }

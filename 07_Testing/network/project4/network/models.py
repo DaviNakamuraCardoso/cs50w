@@ -15,8 +15,7 @@ class User(AbstractUser):
         f.save()
         self.save()
         user.save()
-
-
+        
 
     def unfollow(self, user):
         f = self.following.get(followedId=user.id)
@@ -79,7 +78,7 @@ class User(AbstractUser):
             "username":self.username, 
             "email":self.email, 
             "id": self.id,
-            "message": "Logged."
+            "authenticated": True
 
         }
 

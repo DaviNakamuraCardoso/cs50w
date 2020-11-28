@@ -1,13 +1,10 @@
-
-from django.urls import path
-
+from django.urls import path 
 from . import views
+
 
 urlpatterns = [
     # Real pages 
     path("", views.index, name="index"),
-
-
 
     # Authentication 
     path("login", views.login_view, name="login"),
@@ -21,15 +18,13 @@ urlpatterns = [
     path("user_posts/<str:username>/<int:page>", views.user_posts, name="user_posts"), 
     path("following/<int:page>", views.following, name="following"), 
     
-
-
     # APIs for posts
     path("posts/<int:post_id>", views.get_post, name="get_post"), 
     path("post", views.new_post, name="post"), 
     path("edit/<int:post_id>", views.edit, name="edit"), 
 
-
     # APIs for liking and following
     path("like_post/<int:post_id>", views.like_post, name="like_post"), 
     path("follow/<str:username>", views.follow_user, name="follow_user")
-    ]
+
+]

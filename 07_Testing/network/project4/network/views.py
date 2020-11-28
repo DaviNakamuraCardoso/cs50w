@@ -1,4 +1,3 @@
-import json 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
@@ -6,21 +5,17 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-from django.core.paginator import Paginator 
-
-
 from .models import User, Post, Like 
+import json 
 
 
 def index(request):
     return render(request, "network/index.html")
     
 
-
 def get_page(request, page):
     posts = Post.objects.all().order_by("-id")[10*(page-1):page*10]
     return JsonResponse([post.serialize() for post in posts],  safe=False)
-
 
 
 def following(request, page): 
@@ -30,9 +25,6 @@ def following(request, page):
     s = sorted(posts, key= lambda i: i.id, reverse=True)
     selected = s[(page-1)*10:page*10]
     return JsonResponse([post.serialize() for post in selected], safe=False)
-
-
-    
 
 
 def login_view(request):
@@ -47,10 +39,13 @@ def login_view(request):
         if user is not None:
             login(request, user)
             return HttpResponseRedirect(reverse("index"))
+
+        # If the authentication is not successful, return an error messsage
         else:
             return render(request, "network/login.html", {
                 "message": "Invalid username and/or password."
             })
+        
     else:
         return render(request, "network/login.html")
 
@@ -114,22 +109,24 @@ def new_post(request):
     return JsonResponse({"message": "Successfully posted."},  status=201)
 
 
-
 def get_user(request, username):
+    # Check if the user exists 
     try:
         user = User.objects.get(username=username)
         return JsonResponse({"user":user.serialize()}, status=200, safe=False)
+    # Else, returns 404 code 
     except User.DoesNotExist: 
         return HttpResponse(status=404)
 
 
-
 def current_user(request):
+    # Return false to the authenticated message
     if not request.user.is_authenticated:
-        return JsonResponse({"message": "Not logged."}, status=200)
+        return JsonResponse({"authenticated": False}, status=200)
+
+    # If the user is authenticated, returns the user information
     else:
         return JsonResponse(request.user.serialize(), status=200)
-
 
 
 def user_posts(request, username, page):
@@ -137,8 +134,6 @@ def user_posts(request, username, page):
     posts = user.posts.all().order_by("-id")[(page-1)*10:page*10]
     return JsonResponse([post.serialize() for post in posts], status=200, safe=False)
     
-
-
 
 @csrf_exempt 
 @login_required 
@@ -164,12 +159,8 @@ def like_post(request, post_id):
         return JsonResponse({"result": post.serialize()}, status=204, safe=False)
 
 
-
-
-
 def get_post(request, post_id):
     return JsonResponse({"result": Post.objects.get(pk=post_id).serialize()}, status=200)
-
 
 
 @csrf_exempt 
@@ -190,11 +181,10 @@ def follow_user(request, username):
         return JsonResponse({"message": "Method must be PUT"})
     
 
-
-
 @csrf_exempt 
 @login_required 
 def edit(request, post_id):
+    # Trying to get the post 
     try: 
         post = Post.objects.get(pk=post_id)
 
@@ -215,7 +205,4 @@ def edit(request, post_id):
             return JsonResponse({"updated": updated_post}, status=201)
         else:
             return JsonResponse({"message": "Method must be POST"}, status=400)
-
-
-
 
