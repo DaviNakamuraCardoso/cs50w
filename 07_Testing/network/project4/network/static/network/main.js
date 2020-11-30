@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(response => response.json())
     .then(user => {
         let page = 1;
+
     
         get_page("pages", user, page);
 
@@ -37,14 +38,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
             publish.disabled = true;
             activate_button(publish, text);
-            
 
+            window.onbeforeunload = () => {
+                const url = window.location.href.split("/");
+                console.log(url);
+                const pageNum = parseInt(url[2]);
+                const pathStr = url[1];
+                get_page(pathStr, user, pageNum);
+
+
+            }           
+
+            
 
 
         }
 
                
     });
+
+
 
 
 
@@ -88,7 +101,7 @@ function get_user_page(current_user, username)
             if (user.followers.some(follower => follower == current_username)) 
             {
                 follow.innerHTML = `Unfollow: ${followers_num}`;
-                follow.style.color = "blue";
+                follow.className = "active";
                 follow.onclick = () => 
                 {
                     follow_user(user, follow, true);
@@ -96,7 +109,7 @@ function get_user_page(current_user, username)
             }
             else 
             {
-                follow.style.color = "black";
+                follow.className = "off";
                 follow.innerHTML = `Follow: ${followers_num}`;
                 follow.onclick = () => {
                     follow_user(user, follow, false);
@@ -112,7 +125,7 @@ function get_user_page(current_user, username)
         }
 
         show_div(user_page);
-        get_page(`user_posts/${username}`, current_user, 1);
+        get_page(username, current_user, 1);
         
     });
 
@@ -179,6 +192,8 @@ function get_page(path, current_user, page) {
                 const submit = document.createElement("input");
                 const textarea = document.createElement("textarea");
                 const edit_div = document.createElement("div");
+                const btn_container = document.createElement("div");
+                const heading = document.createElement("div");
 
                 // Setting the classes 
                 div.className = `post-div`;
@@ -187,6 +202,9 @@ function get_page(path, current_user, page) {
                 timestamp.className = 'post-timestamp';
                 like.className = 'post-like';
                 dislike.className = 'post-dislike';
+                edit.className = "edit";
+                btn_container.className = "btn-container";
+                heading.className = "post-heading";
             
                 
                 // Creating the form for editing
@@ -228,9 +246,12 @@ function get_page(path, current_user, page) {
 
                 // Adding the subelements to the main div 
                 edit_div.append(body);
-                div.append(username);
+                heading.append(username);
+                heading.append(timestamp);
+                
+                
+                div.append(heading);
                 div.append(edit_div);
-                div.append(timestamp);
 
                 form.append(textarea);
                 form.append(submit);
@@ -241,15 +262,15 @@ function get_page(path, current_user, page) {
 
                 if (post.user != current_user.username && current_user.authenticated) 
                 {
-                    div.append(like);
-                    div.append(dislike);
+                    btn_container.append(like);
+                    btn_container.append(dislike);
+                    div.append(btn_container);
 
                 }       
                 else  
                 {
                     if (current_user.username === post.user)
                     {
-                        div.style.border = "2px solid blue";
                         div.append(edit);
                     }
                     lNum = document.createElement("p");
@@ -269,7 +290,7 @@ function get_page(path, current_user, page) {
 
                     if (current_user.liked_posts.some(post_id => post_id == post.id)) 
                     {
-                        like.style.color = "blue";
+                        like.className = "active";
                         dislike.onclick = () => {
                             dislike_post(like, dislike, post, true);
                         }
@@ -280,7 +301,7 @@ function get_page(path, current_user, page) {
                     }
                     else if (current_user.disliked_posts.some(post_id => post_id == post.id)) 
                     {
-                        dislike.style.color = "blue";
+                        dislike.className = "active";
                         like.onclick = () => {
                             like_post(like, dislike, post, true);
                         }
@@ -302,11 +323,6 @@ function get_page(path, current_user, page) {
 
                 }
                 
-
-                
-
-
-
             });
         });
         
@@ -335,7 +351,8 @@ function get_page(path, current_user, page) {
         footer.innerHTML = "";
         footer.append(previous);
         footer.append(next);
-
+        
+        history.pushState(page, "", `/${path}/${page}`);
 
 
     
@@ -357,14 +374,14 @@ function follow_user(user, button, unfollow) {
         .then(response => response.json())
         .then(result => {
             if (unfollow) {
-                button.style.color = "black"; 
+                button.className = "off";
                 button.innerHTML = `Follow ${result.user.followers.length}`;
                 button.onclick = () => {
                     follow_user(result.user, button, false);
                 }
             }
             else {
-                button.style.color = "blue"; 
+                button.className = 'active';
                 button.innerHTML = `Unfollow: ${result.user.followers.length}`;
                 button.onclick = () => {
                     follow_user(result.user, button, true);
@@ -388,14 +405,14 @@ function like_post(like_button, dislike_button, post, undo) {
         .then(response => response.json())
         .then(result => {
         // Setting the user view for likes 
-        like_button.style.color = "blue";
+        like_button.className = "active";
         like_button.innerHTML = `Like: ${post.likes + 1}`;
         like_button.onclick = () => {
             undo_like(like_button, dislike_button, result.result);
         }
 
         // Setting the user view for dislikes
-        dislike_button.style.color = "black";
+        dislike_button.className = "off";
 
         dislike_button.onclick = () => {
             dislike_post(like_button, dislike_button, result.result, true);
@@ -430,14 +447,14 @@ function dislike_post(like_button, dislike_button, post, undo) {
     .then(result => {
 
         // Setting the user view for dislikes 
-        dislike_button.style.color = "blue";
+        dislike_button.className = "active";
         dislike_button.innerHTML = `Dislike: ${post.dislikes + 1}`;
         dislike_button.onclick = () => {
             undo_dislike(like_button, dislike_button, result.result);
         }
 
         // Setting the user view for likes
-        like_button.style.color = "black";
+        like_button.className = "off";
         like_button.onclick = () => {
             like_post(like_button, dislike_button, result.result, true);
         }
@@ -462,7 +479,7 @@ function undo_like(like_button, dislike_button,  post) {
     .then(result => {
         // Setting the user view 
         like_button.innerHTML = `Like: ${post.likes - 1}`;
-        like_button.style.color = "black";
+        like_button.className = "off";
 
         dislike_button.onclick = () => {
             dislike_post(like_button, dislike_button, result.result, false);
@@ -486,7 +503,7 @@ function undo_dislike(like_button, dislike_button, post) {
     .then(result => {
         // Setting the user view 
         dislike_button.innerHTML = `Dislike: ${post.dislikes - 1}`;
-        dislike_button.style.color = "black";
+        dislike_button.className = "off";
 
 
         like_button.onclick = () => {
