@@ -5,11 +5,36 @@
     font-family: "Poppins", sans-serif;
 }
 
+textarea 
+{
+    position: relative;
+    width: 100%;
+    min-height: 200px;
+    text-align: justify;
+    padding: 20px;
+    align-self: center;
+    line-height: 20px;
+    font-size: 16px;
+    transform: translateX(-50%);
+    left: 50%;
+}
+
+
+.edit-div 
+{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-self: center;
+
+}
+
+
+
 #post-container 
 {
     display: flex;
     flex-direction: column; 
-
 }
 
 
@@ -29,28 +54,40 @@
     flex-flow: column wrap;
     border: 1px solid black;
     margin-top: 20px;
-    padding: 30px;
-    transition: all 1s ease;
+    padding: 50px;
     width: 70%;
     align-self: center;
-
-
+    word-wrap: break-word;
+}
+.post-body 
+{
+    text-align: justify;
+    max-width: 100%;
 }
 
 .post-div:hover 
 {
-    transition-delay: .5s;
-    background: #e5e5e5;
+    transition-delay: 2s;
+    background: #f9f9f9;
 }
 
-.post-heading 
+.publication-details 
 {
     display: flex;
     justify-content: space-between;
-    width: 50%;
-    align-self: left;
+    width: 100%;
+    align-items: center;
+}
 
+.author 
+{
+    color: #1da1f2;
+    text-decoration: none;
+}
 
+.author:hover 
+{
+    text-decoration: underline;
 }
 
 .post-div h3 
@@ -58,7 +95,7 @@
     font-weight: 600; 
 }
 
-.post-div .edit 
+.edit 
 {
     align-self: center;
     width: 300px;
@@ -71,7 +108,7 @@
     transition: all 1s ease;
 }
 
-.post-div .edit::before 
+.edit::before 
 {
     content: "";
     width: 0px;
@@ -86,21 +123,80 @@
     transform: translateX(-50%);
 }
 
-.active {
+.active 
+{
     color: #1da1f2;
 }
 
-.off {
-    color: #1e1e1e;
+.off 
+{
+    color: #aaaaca;
 }
+
+.static 
+{
+    color: black;
+    pointer-events: none;
+}
+
+
+.following
+{
+    pointer-events: none;
+}
+
+
+.active, .off, .static
+{
+    font-size: 20px;
+
+}
+
+.active, .off 
+{
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+}
+
+.active::before, .off::before 
+{
+    width: 0px;
+    height: 5px;
+    content: "";
+    position: absolute;
+    border-bottom: 2px solid #1da1f2;
+    bottom: 0;
+    right: 70px;
+    z-index: -1;
+    transition: width 1s ease;
+
+
+
+}
+
+.active:hover::before, .off:hover::before
+{
+    width: 60px;
+}
+
+
+
 
 .post-div button {
     background: none;
-    border: 1px solid #1e1e1e;
+    border: none;
     cursor: pointer;
     align-self: center;
     width: 200px;
+    
 
+}
+
+.post-div button:focus 
+{
+    outline: none;
+    border: none;
 }
 
 
@@ -114,15 +210,14 @@
     display: flex;
 }
 
-.post-div .edit:hover:before 
+.edit:hover:before 
 {
     width: 100%;
 }
 
-.post-div .edit:hover {
+.edit:hover 
+{
     color: white;
-    border: 1px solid #1da1f2;
-
 }
 
 .hide-post 
@@ -130,7 +225,7 @@
     animation-name: hide;
     animation-play-state: running;
     animation-fill-mode: forwards;
-    animation-duration: 2s;
+    animation-duration: 0.1s;
     text-align: center;
     display: flex;
     flex-flow: column wrap;
