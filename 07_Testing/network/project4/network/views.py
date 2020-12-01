@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from .models import User, Post, Like 
 import json 
+import math
 
 
 def index(request):
@@ -15,16 +16,32 @@ def index(request):
 
 def get_page(request, page):
     posts = Post.objects.all().order_by("-id")[10*(page-1):page*10]
-    return JsonResponse([post.serialize() for post in posts],  safe=False)
+    selected = [post.serialize() for post in posts]
+    selected.append(math.ceil(len(Post.objects.all()) / 10))
+    return JsonResponse(selected,  safe=False)
 
 
 def following(request, page): 
     posts = []
     for follow in request.user.following.all():
         posts += follow.followed.posts.all().order_by("-id")
+
     s = sorted(posts, key= lambda i: i.id, reverse=True)
     selected = s[(page-1)*10:page*10]
-    return JsonResponse([post.serialize() for post in selected], safe=False)
+    last_posts =  [post.serialize() for post in selected]
+    last_posts.append(math.ceil(len(posts) / 10))
+    return JsonResponse(last_posts, safe=False)
+
+
+def user_page(request, username):
+    user = User.objects.get(username=username)
+    return render(request, "network/user_page.html", {
+        "user":user 
+    })
+
+
+def followed(request):
+    return render(request, "network/followed.html") 
 
 
 def login_view(request):
@@ -132,7 +149,9 @@ def current_user(request):
 def user_posts(request, username, page):
     user = User.objects.get(username=username)
     posts = user.posts.all().order_by("-id")[(page-1)*10:page*10]
-    return JsonResponse([post.serialize() for post in posts], status=200, safe=False)
+    final_posts = [post.serialize() for post in posts]
+    final_posts.append(math.ceil(len(user.posts.all()) / 10))
+    return JsonResponse(final_posts, status=200, safe=False)
     
 
 @csrf_exempt 

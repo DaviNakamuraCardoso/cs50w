@@ -5,6 +5,8 @@ from . import views
 urlpatterns = [
     # Real pages 
     path("", views.index, name="index"),
+    path("user/<str:username>", views.user_page, name="user"), 
+    path("followed", views.followed, name="followed"), 
 
     # Authentication 
     path("login", views.login_view, name="login"),
@@ -12,10 +14,11 @@ urlpatterns = [
     path("register", views.register, name="register"), 
     path("current_user", views.current_user, name="current_user"), 
 
+
     # APIs for pages 
     path("pages/<int:page>", views.get_page, name="get_page"), 
     path("users/<str:username>", views.get_user, name="user_page"), 
-    path("<str:username>/<int:page>", views.user_posts, name="user_posts"), 
+    path("get_user_page/<str:username>/<int:page>", views.user_posts, name="user_posts"), 
     path("following/<int:page>", views.following, name="following"), 
     
     # APIs for posts
