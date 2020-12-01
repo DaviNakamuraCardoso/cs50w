@@ -75,6 +75,8 @@ class User(AbstractUser):
             "disliked_posts": [dislike.post.id for dislike in self.user_dislikes.all()], 
             "followers": [follow.follower.username for follow in self.followers.all()], 
             "following": [follow.followed.username for follow in self.following.all()], 
+            "followers_num": len(self.followers.all()), 
+            "following_num": len(self.following.all()), 
             "username":self.username, 
             "email":self.email, 
             "id": self.id,
@@ -97,6 +99,8 @@ class Post(models.Model):
         return {
             "id": self.id, 
             "user": self.user.username, 
+            "first": self.user.first, 
+            "last": self.user.last, 
             "post": self.post, 
             "timestamp": self.timestamp.strftime("%b %d, %Y %-I:%M %p"), 
             "likes": len(self.post_likes.all()), 
