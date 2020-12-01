@@ -7,7 +7,7 @@
     <div id="new-post">
         <form method="post">
             {% csrf_token %}
-            <input id="post" name="post" type="text">
+            <input id="post" name="post" type="text" maxlength="400">
             <input id="publish" type="submit">  
 
         </form>
@@ -17,9 +17,7 @@
     {% endif %}
 
 
-    <div id="user_page"></div>
     <div id="post-container"></div>
-    <div id="trash"></div>
     <div id="footer"></div>
 
 {% endblock %}

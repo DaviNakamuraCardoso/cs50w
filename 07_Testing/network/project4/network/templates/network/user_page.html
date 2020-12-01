@@ -3,12 +3,9 @@
 
 {% block body %}
 
-    <h1>{{ user.first }} {{ user.last }}</h1>
-    <h2>{{ user.username }}</h2>
-    {% if request.user.username != user.username %}
+    <div id="user_page"></div>
+    <div id="post-container"></div>
+    <div id="footer"></div>
 
-    
-    <button id="follow">Follow</button>
-    {% endif %}
     
 {% endblock %}
