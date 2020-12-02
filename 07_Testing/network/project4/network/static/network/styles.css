@@ -193,7 +193,17 @@ textarea
     width: 60px;
 }
 
+#follow-btn-off
+{
+    border: 1px solid #e1e1e1;
+    border-radius: 20px;
+}
 
+#follow-btn-active
+{
+    border: 1px solid #1da1f2;
+    border-radius: 20px;
+}
 
 
 .post-div button 
