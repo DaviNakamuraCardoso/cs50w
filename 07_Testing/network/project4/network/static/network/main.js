@@ -59,10 +59,12 @@ function get_user_page(current_user, username)
         const follow = document.createElement("button");
         const followingNum = document.createElement("button");
         const follow_container = document.createElement("div");
+        const heading = document.createElement("div");
 
         // Adding the information in the elements 
+        
         title.innerHTML = `${user.first} ${user.last}`;
-        h2.innerHTML = user.username;
+        h2.innerHTML = `@${user.username}`;
         followingNum.innerHTML = `Following: ${user.following.length}`;
 
         
@@ -70,10 +72,15 @@ function get_user_page(current_user, username)
         let followers_num = user.followers_num;
 
         followingNum.className = "static";
+        title.className = "user-title";
+        h2.className = "user-username";
+        heading.className = "user-heading";
+        follow_container.className = "follow-container";
 
         // Appending to the main div
-        user_page.append(title);
-        user_page.append(h2);
+        heading.append(title);
+        heading.append(h2);
+        user_page.append(heading);
         follow_container.append(followingNum);
 
         if (current_user.authenticated && current_user.username != username) 
@@ -160,8 +167,9 @@ function get_page(path, current_user, page) {
         const next = document.createElement("button");
 
         // Labels 
-        previous.innerHTML = "Previous Page";
-        next.innerHTML = "Next Page";
+        previous.innerHTML = "<i class='fas fa-arrow-left'></i><span>Previous Page</span>";
+        next.innerHTML = "<span>Next Page</span><i class='fas fa-arrow-right'></i>";
+
 
 
         if (page <= 1) 
@@ -267,7 +275,7 @@ function get_page(path, current_user, page) {
                 username.href = `/user/${post.user}`;
 
                 // Filling the elements  
-                username.innerHTML = post.user;
+                username.innerHTML = `@${post.user}`;
                 name.innerHTML = `${post.first} ${post.last}`;
                 body.innerHTML = post.post;
                 timestamp.innerHTML = post.timestamp;
@@ -383,7 +391,7 @@ function get_page(path, current_user, page) {
                 }
             
             });
-            smoothScroll(".body", 2200);
+            smoothScroll(".body", 1100);
         });
         
         
