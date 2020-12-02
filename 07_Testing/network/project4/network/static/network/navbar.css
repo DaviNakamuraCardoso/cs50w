@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@700&display=swap');
+body
+{
+    margin: 0;
+    padding: 0;
+}
+
+.navbar 
+{
+    display: flex;
+    width: 100vw;
+    flex-direction: row;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    background: #1da1f2;
+    height: 10vh;
+    z-index: 1;
+    position: fixed;
+}
+
+
+.body
+{
+    padding-top: 4vh;
+    margin-top: 3vh;
+    display: flex;
+    
+}
+
+.nav-div
+{
+    display: flex;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+
+.navbar-nav
+{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    align-self: center;
+    flex-direction: row;
+    width: 100%;
+    position: relative;
+
+}
+
+.nav-item
+{
+    margin: 0;
+    padding: 0;
+
+}
+
+.nav-link
+{
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    font-weight: 1000;
+    color: white;
+    transition: all 1s ease;
+    font-size: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-link::before
+{
+    content: "";
+    border-bottom: 3px solid white;
+    position: absolute;
+    right: 0;
+    bottom: -5px;
+    width: 0;
+    transition: width .8s ease-in-out;
+    
+}
+
+.nav-link:hover::before
+{
+    width: 100%;
+}
+
+.logo
+{
+    display: flex;
+    flex-direction: row;
+    text-decoration: none;
+    color: white;
+    padding: 20px;
+    align-self: center;
+    font-family: "Passion One", sans-serif;
+    justify-content: space-around;
+    padding-left: 100px;
+}
+#logo
+{
+    font-size: 50px;
+}
