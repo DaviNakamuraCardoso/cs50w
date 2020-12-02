@@ -1,0 +1,111 @@
+#new-post
+{
+    align-self: center;
+    display: flex;
+    position: relative;
+    justify-content: space-around;
+    align-items: center;
+    transform: translateX(-50%);
+    left: 50%;
+    top: 0;
+    margin-bottom: 5vh;
+    
+}
+
+#new-post form 
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    align-content: center;
+    align-items: center;  
+
+}
+
+
+#post
+{
+    min-height: 100px;
+    width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid #1da1f2;
+
+}
+#publish, #post 
+{
+    margin-top: 20px;
+}
+
+.register
+{
+    display: flex;
+    flex-direction: column;
+}
+.form-group
+{
+    align-self: center;
+    margin: 10px 0;
+    
+}
+
+.form-control, .submit-btn
+{
+    text-align: center;
+    padding: 10px;
+    border-radius: 30px;
+    outline: none;
+    background: none;
+    border: 1px solid #1da1f2;
+    transition: all 1s ease;
+    width: 300px;
+}
+
+.submit-btn
+{
+    align-self: center;
+    cursor: pointer;
+    margin-top: 30px;
+
+
+}
+
+.form-control:focus, .submit-btn:hover
+{
+    width: 400px; 
+}
+
+#title
+{
+    text-align: center;
+    margin-top: 40px;
+}
+
+#bottom-line 
+{
+    text-align: center; 
+}
+#bottom-line a 
+{
+    text-decoration: none;
+    color: #1da1f2;
+}
+
+#bottom-line a:hover 
+{
+    text-decoration: underline;
+}
+
+#message
+{
+    color: white;
+    background: #f17171;
+    align-self: center;
+    padding: 10px;
+    margin-top: 3vh;
+    
+
+    
+}
