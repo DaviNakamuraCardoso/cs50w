@@ -1,14 +1,14 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-
-    <h2>Register</h2>
-
     {% if message %}
-        <div>{{ message }}</div>
+        <div id="message">{{ message }}</div>
     {% endif %}
+    <h1 id="title">Register</h1>
 
-    <form action="{% url 'register' %}" method="post">
+    
+
+    <form action="{% url 'register' %}" method="post" class="register">
         {% csrf_token %}
         <!-- First Name -->
         <div class="form-group">
@@ -42,9 +42,9 @@
 
 
         <!-- Submit button -->
-        <input class="btn btn-primary" type="submit" value="Register">
+        <input class="submit-btn" type="submit" value="Register">
     </form>
 
-    Already have an account? <a href="{% url 'login' %}">Log In here.</a>
+    <p id="bottom-line">Already have an account? <a href="{% url 'login' %}">Log In here.</a></p>
 
 {% endblock %}

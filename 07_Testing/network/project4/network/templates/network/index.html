@@ -3,12 +3,15 @@
 {% block body %}
 
     {% if user.is_authenticated %}
-    <div id="message"></div>
+    {% if message %}
+    <div id="message">{{ message }}</div>
+    {% endif %}
+    <h1 id="title">New post</h1>
     <div id="new-post">
         <form method="post">
             {% csrf_token %}
-            <input id="post" name="post" type="text" maxlength="400">
-            <input id="publish" type="submit">  
+            <textarea id="post" name="post" maxlength="400"></textarea>
+            <input class="submit-btn" id="publish" type="submit" value="Publish">  
 
         </form>
 
