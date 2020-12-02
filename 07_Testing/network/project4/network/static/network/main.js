@@ -58,6 +58,7 @@ function get_user_page(current_user, username)
         const h2 = document.createElement("h2");
         const follow = document.createElement("button");
         const followingNum = document.createElement("button");
+        const followersNum = document.createElement("button");
         const follow_container = document.createElement("div");
         const heading = document.createElement("div");
 
@@ -66,12 +67,14 @@ function get_user_page(current_user, username)
         title.innerHTML = `${user.first} ${user.last}`;
         h2.innerHTML = `@${user.username}`;
         followingNum.innerHTML = `Following: ${user.following.length}`;
+        followersNum.innerHTML = `Followers: ${user.followers_num}`;
 
         
         const current_username = current_user.username;
         let followers_num = user.followers_num;
 
         followingNum.className = "static";
+        followersNum.className = "static";
         title.className = "user-title";
         h2.className = "user-username";
         heading.className = "user-heading";
@@ -81,42 +84,39 @@ function get_user_page(current_user, username)
         heading.append(title);
         heading.append(h2);
         user_page.append(heading);
+        follow_container.append(followersNum);
         follow_container.append(followingNum);
 
+        user_page.append(follow_container);
         if (current_user.authenticated && current_user.username != username) 
         {
 
             if (user.followers.some(follower => follower == current_username)) 
             {
-                follow.innerHTML = `Unfollow: ${followers_num}`;
+                follow.innerHTML = `Unfollow`;
                 follow.className = "active";
+                follow.id = "follow-btn-active";
                 follow.onclick = () => 
                 {
-                    follow_user(user, follow, true);
+                    follow_user(user, follow, true, followersNum);
                 }
+
             }
             else 
             {
                 follow.className = "off";
-                follow.innerHTML = `Follow: ${followers_num}`;
+                follow.id = "follow-btn-off";
+                follow.innerHTML = `Follow`;
                 follow.onclick = () => {
-                    follow_user(user, follow, false);
+                    follow_user(user, follow, false, followersNum);
                 }
             }
-            follow_container.append(follow);
 
+            user_page.append(follow);
             
         }
-        else
-        {
             
-            const followers = document.createElement("button");
-            followers.className = "static";
-            followers.innerHTML = `Followers: ${followers_num}`;
-            follow_container.append(followers);
             
-        }
-        user_page.append(follow_container);
 
         show_div(user_page);
         get_page(`get_user_page/${username}`, current_user, 1);
@@ -272,6 +272,7 @@ function get_page(path, current_user, page) {
                 
                 // Creating the form for editing
                 submit.type = "submit";
+                submit.className = "submit-btn";
                 username.href = `/user/${post.user}`;
 
                 // Filling the elements  
@@ -401,7 +402,7 @@ function get_page(path, current_user, page) {
 
 
 
-function follow_user(user, button, unfollow) {
+function follow_user(user, button, unfollow, followers) {
     fetch(`/follow/${user.username}`, {
         method: "PUT", 
         body: JSON.stringify({
@@ -416,16 +417,20 @@ function follow_user(user, button, unfollow) {
         .then(result => {
             if (unfollow) {
                 button.className = "off";
-                button.innerHTML = `Follow ${result.user.followers.length}`;
+                button.id = "follow-btn-off";
+                button.innerHTML = `Follow`;
+                followers.innerHTML = `Followers: ${result.user.followers.length}`;
                 button.onclick = () => {
-                    follow_user(result.user, button, false);
+                    follow_user(result.user, button, false, followers);
                 }
             }
             else {
                 button.className = 'active';
-                button.innerHTML = `Unfollow: ${result.user.followers.length}`;
+                button.id = "follow-btn-active";
+                button.innerHTML = `Unfollow`;
+                followers.innerHTML = `Followers: ${result.user.followers.length}`;
                 button.onclick = () => {
-                    follow_user(result.user, button, true);
+                    follow_user(result.user, button, true, followers);
                 }
             }
         });
