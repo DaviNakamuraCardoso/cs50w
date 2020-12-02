@@ -20,7 +20,7 @@ def get_page(request, page):
     selected.append(math.ceil(len(Post.objects.all()) / 10))
     return JsonResponse(selected,  safe=False)
 
-
+@login_required 
 def following(request, page): 
     posts = []
     for follow in request.user.following.all():
@@ -32,14 +32,14 @@ def following(request, page):
     last_posts.append(math.ceil(len(posts) / 10))
     return JsonResponse(last_posts, safe=False)
 
-
+@login_required 
 def user_page(request, username):
     user = User.objects.get(username=username)
     return render(request, "network/user_page.html", {
         "user":user 
     })
 
-
+@login_required
 def followed(request):
     return render(request, "network/followed.html") 
 
@@ -145,7 +145,7 @@ def current_user(request):
     else:
         return JsonResponse(request.user.serialize(), status=200)
 
-
+@login_required 
 def user_posts(request, username, page):
     user = User.objects.get(username=username)
     posts = user.posts.all().order_by("-id")[(page-1)*10:page*10]
