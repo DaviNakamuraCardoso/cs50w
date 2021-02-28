@@ -231,12 +231,6 @@ body::-webkit-scrollbar-thumb, textarea::-webkit-scrollbar {
 }
 
 
-
-
-
-
-
-
 i {
   color: #ff7eee;
   transition: var(--transition-speed);
